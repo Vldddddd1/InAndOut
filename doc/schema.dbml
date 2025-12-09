@@ -1,0 +1,101 @@
+// Syntax documentation: https://dbml.dbdiagram.io/docs/
+
+//////////////////////////////////////////////////////
+// FIRST SECTION
+//////////////////////////////////////////////////////
+
+// Still define different passageways if the entrance and the exit are the same place.
+Table passageway {
+  Note: "Entrance or exit point on a floor."
+
+  id int [pk]
+  floor_id int [ref: > floor.id, Note: "Floor this passageway belongs to."]
+  location_id int [ref: > location.id, Note: "Coordinate of the passageway."]
+  is_entrance bool [Note: "True for entrance, false for exit."]
+}
+
+Table floor {
+  Note: "A store can have one or multiple floors."
+  
+  id int [pk]
+  store_id int [ref: > store.id]
+}
+
+Table store {
+  Note: "Physical store with size and geolocation."
+
+  id int [pk]
+  name string
+  
+  width int [Note: "Store width in a two-dimensional-map units."]
+  height int [Note: "Store height in a two-dimensional-map units."]
+  
+  longitude double
+  latitude double
+}
+
+Table product {
+  Note: "Product instance placed at a specific location."
+
+  id int [pk]
+  floor_id int [ref: > floor.id, Note: "Floor where the product is located."]
+  location_id int [ref: > location.id, Note: "Product coordinate on the floor."]
+  
+  price double
+  vendor string [null, Note: "e.g. Zuzu, Alpro, etc."]
+  
+  variant string [null, Note: "e.g. almond milk"]
+  subcategory string [Note: "e.g. milk"]
+  category string [Note: "e.g. dairy products"]
+}
+
+Table location {
+  Note: "Grid coordinate on a floor."
+
+  id int [pk]
+  abscissa int [Note: "x coordinate."]
+  ordinate int [Note: "y coordinate."]
+}
+
+//////////////////////////////////////////////////////
+// SECOND SECTION
+//////////////////////////////////////////////////////
+
+Table offer {
+  Note: "Promotional offer with optional period or dependency."
+
+  id int [pk]
+  period_id int [null, ref: > period.id, Note: "Optional active time period in a day."]
+  dependency_id int [null, ref: > dependency.product_id, Note: "e.g. \"Buy one orange to get an discount to the second one\"."]
+
+  percentage int
+  created_at datetime
+  lifetime datetime
+}
+
+
+Table discount {
+  Note: "Links an offer to discounted products."
+
+  offer_id int [ref: > offer.id]
+  product_id int [ref: > product.id]
+
+  indexes {
+    (offer_id, product_id) [pk]
+  }
+}
+
+Table period {
+  Note: "Daily time window for an offer."
+
+  id int [pk]
+  begin datetime [default: "00:00", Note: "Start time of offer."]
+  end datetime [default: "23:59", Note: "End time of offer."]
+}
+
+Table dependency {
+  Note: "Required product quantity to activate an offer."
+
+  product_id int [pk, ref: > product.id]
+  quantity int
+}
