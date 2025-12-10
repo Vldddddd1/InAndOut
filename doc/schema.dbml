@@ -1,101 +1,176 @@
 // Syntax documentation: https://dbml.dbdiagram.io/docs/
 
 //////////////////////////////////////////////////////
-// FIRST SECTION
+// STORE STRUCTURE SECTION
 //////////////////////////////////////////////////////
-
-// Still define different passageways if the entrance and the exit are the same place.
-Table passageway {
-  Note: "Entrance or exit point on a floor."
-
-  id int [pk]
-  floor_id int [ref: > floor.id, Note: "Floor this passageway belongs to."]
-  location_id int [ref: > location.id, Note: "Coordinate of the passageway."]
-  is_entrance bool [Note: "True for entrance, false for exit."]
-}
 
 Table floor {
-  Note: "A store can have one or multiple floors."
+  note: "A store can have one or multiple floors."
   
-  id int [pk]
-  store_id int [ref: > store.id]
-}
+  id int [not null, pk, increment]
 
-Table store {
-  Note: "Physical store with size and geolocation."
-
-  id int [pk]
-  name string
-  
-  width int [Note: "Store width in a two-dimensional-map units."]
-  height int [Note: "Store height in a two-dimensional-map units."]
-  
-  longitude double
-  latitude double
-}
-
-Table product {
-  Note: "Product instance placed at a specific location."
-
-  id int [pk]
-  floor_id int [ref: > floor.id, Note: "Floor where the product is located."]
-  location_id int [ref: > location.id, Note: "Product coordinate on the floor."]
-  
-  price double
-  vendor string [null, Note: "e.g. Zuzu, Alpro, etc."]
-  
-  variant string [null, Note: "e.g. almond milk"]
-  subcategory string [Note: "e.g. milk"]
-  category string [Note: "e.g. dairy products"]
-}
-
-Table location {
-  Note: "Grid coordinate on a floor."
-
-  id int [pk]
-  abscissa int [Note: "x coordinate."]
-  ordinate int [Note: "y coordinate."]
-}
-
-//////////////////////////////////////////////////////
-// SECOND SECTION
-//////////////////////////////////////////////////////
-
-Table offer {
-  Note: "Promotional offer with optional period or dependency."
-
-  id int [pk]
-  period_id int [null, ref: > period.id, Note: "Optional active time period in a day."]
-  dependency_id int [null, ref: > dependency.product_id, Note: "e.g. \"Buy one orange to get an discount to the second one\"."]
-
-  percentage int
-  created_at datetime
-  lifetime datetime
-}
-
-
-Table discount {
-  Note: "Links an offer to discounted products."
-
-  offer_id int [ref: > offer.id]
-  product_id int [ref: > product.id]
+  number int [not null, default: 1, note: "One stands for the ground floor, two for the 2nd floor, etc."]
+  store_id int [not null, ref: > store.id]
 
   indexes {
-    (offer_id, product_id) [pk]
+    store_id
   }
 }
 
-Table period {
-  Note: "Daily time window for an offer."
+Table store {
+  note: "Physical store with size and geolocation."
 
-  id int [pk]
-  begin datetime [default: "00:00", Note: "Start time of offer."]
-  end datetime [default: "23:59", Note: "End time of offer."]
+  id int [not null, pk, increment]
+
+  name varchar(63) [not null]
+  logo_url varchar(255) [not null]
+  image_url varchar(255) [note: "If not provided, the logo displayed instead."]
+  description varchar(255)
+  
+  longitude double
+  latitude double
+
+  indexes {
+    name
+  }
+}
+
+//////////////////////////////////////////////////////
+// LOCATION REPRESENTATION SECTION
+//////////////////////////////////////////////////////
+
+Enum node_type {
+  navigation [note: "Either store corners or aisle intersections."]
+
+  // Should be defined for all floor except the highest one.
+  elevation [note: "An elevator or staircase to the level above."]
+  // Should be defined for all floors except the ground one.
+  descent [note: "An elevator or staircase to the level below."]
+}
+
+Table node {
+  note: "User reachable area."
+  
+  id int [not null, pk, increment]
+  floor_id int [not null, ref: > floor.id]
+
+  number int [not null]
+  type node_type [not null, default: node_type.navigation]
+  name varchar(63) [note: "e.g. \"Start of the principal corridor\", \"Milk-toys intersection\""]
+
+  indexes {
+    floor_id
+  }
+}
+
+Table edge {
+  note: "Represents an aisle between two reachable points."
+
+  id int [not null, pk, increment]
+  floor_id int [not null, ref: > floor.id]
+
+  // These two must be on the same floor id.
+  // That id must be the same as this edge floor id.
+  source_node_id int [not null, ref: > node.id]
+  target_node_id int [not null, ref: > node.id]
+
+  name varchar(63) [note: "e.g. \"milk corridor\""]
+  weight int
+
+  checks {
+    `source_node_id != target_node_id` [name: "An edge must be between two different nodes."]
+  }
+
+  indexes {
+    floor_id
+  }
+}
+
+//////////////////////////////////////////////////////
+// PRODUCT SECTION
+//////////////////////////////////////////////////////
+
+Table stand {
+  note: "Links a specific place on a shelf to an article."
+  
+  edge_id int [not null, ref: > edge.id]
+  article_id int [not null, ref: > article.id]
+
+  source_node_distance int [not null]
+
+  indexes {
+    (edge_id, article_id) [pk]
+  }
+}
+
+// There is a hidden one-one relationship between an article and a store.
+Table article {
+  note: "Product instance placed at a specific location."
+
+  id int [not null, pk, increment]
+  product_id int [not null, ref: > product.id]
+  
+  amount double [not null, note: "This is decided by each store individually."]
+  currency varchar(255)
+}
+
+Table product {
+  note: "Product details."
+
+  id int [not null, pk, increment]
+  
+  variant varchar(63) [note: "e.g. almond milk"]
+  subcategory varchar(63) [not null, note: "e.g. milk"]
+  category varchar(63) [not null, note: "e.g. dairy products"]
+
+  vendor varchar(63) [note: "e.g. Zuzu, Alpro, etc."]
+  image_url varchar(255)
+  description varchar(255)
+
+  indexes {
+    vendor
+  }
+}
+
+//////////////////////////////////////////////////////
+// DISCOUNT SECTION
+//////////////////////////////////////////////////////
+
+Table discount {
+  note: "Links an offer to discounted articles."
+
+  article_id int [not null, ref: > article.id]
+  offer_id int [not null, ref: > offer.id]
+
+  indexes {
+    (offer_id, article_id) [pk]
+  }
+}
+
+Table offer {
+  note: "Promotional offer with optional period or dependency."
+
+  id int [not null, pk, increment]
+  period_id int [ref: > period.id, note: "Optional active time period in a day."]
+  dependency_id int [ref: > dependency.article_id, note: "e.g. \"Buy one orange to get an discount to the second one\"."]
+
+  percentage int [not null]
+  created_at datetime [not null]
+  lifetime datetime
+}
+
+Table period {
+  note: "Daily time window for an offer."
+
+  id int [not null, pk, increment]
+  
+  begin datetime [not null, default: "00:00", note: "Start time of offer."]
+  end datetime [not null, default: "23:59", note: "End time of offer."]
 }
 
 Table dependency {
-  Note: "Required product quantity to activate an offer."
+  note: "Required product quantity to activate an offer."
 
-  product_id int [pk, ref: > product.id]
+  article_id int [not null, pk, ref: > article.id]
   quantity int
 }
