@@ -1,27 +1,163 @@
-References:
+# Overview
+
+Our API is designed around Business Intent rather than database [tables](https://dbdiagram.io/d/InAndOut-693154e7d6676488ba8f6f4d). While the underlying schema is normalized, the API provides high-level abstractions to reduce "integration friction" for our users.
+
+Our users are either:
+
+- Clients (regular physical people)
+- Owners (business/store/brand owner - have more privileges)
+- Admins (system admins, devs, operational teams - have all privileges)
+
+Main entities:
+
+- Store: The physical unit with a brand identity, location, and operating schedule.
+- Article: The brand-specific commercial definition of a product (Price, Currency, Brand).
+- Stand: The bridge between an Article and a physical location (Edge) within a store.
+- Offer: Promotional logic linked to articles or stores.
+
+## API Interaction Patterns
+
+### The Composite Pattern
+
+To support a "one-click" onboarding experience for Owners, we provide Composite Operations.
+
+Internal Automation: When a store registers a new Stand, the system automatically upserts the underlying Product and Article records if they do not already exist.
+
+User Experience: Owners should not be forced to orchestrate three separate POST requests (Product -> Article -> Stand) to stock a shelf.
+
+### The Granular Pattern
+
+To satisfy complex intents - such as de-listing an item from a shelf without deleting it from the brand catalog; we expose Lower-Level APIs.
+
+Persistence: Articles and Products exist independently of Stands. Removing a Stand entry does not destroy the Article record, allowing it to be easily re-placed or utilized by other stores of the same brand.
+
+Advanced Intent: Allows power users to pre-register inventory at the brand level before physical distribution.
+
+## Resource Encapsulation
+
+We strictly enforce Domain Encapsulation to keep the API surface clean:
+
+Brand & Program Management: Users should not interact with `/brands/` or `/operating/` directly. These are managed as sub-resources or nested attributes of a Store.
+
+## Example Workflows
+
+### Scenario A: Quick Onboarding (Composite)
+
+Intent: "I want to put Alpro Almond Milk on Shelf A in Store #101."
+Action: POST /stores/101/stands
+Payload: Includes Product details (Vendor, Category), Price, and Location (edge_id).
+Result: Backend creates/links Product, Article, and Stand in a single atomic transaction.
+
+### Scenario B: Inventory Management (Granular)
+
+Intent: "I want to remove this milk from the shelf but keep it in my brand catalog for later."
+Action: DELETE /stores/101/stands/{id}
+Result: The Stand record is removed. The Article and Product remain in the system for future use.
+
+# Versioning
+
+### User typical workflow
+
+0. selects store
+1. LIST **available** articles in the corresponding store (and then call `LIST offers` - not now, see v3)
+2. uses the search bar
+3. selects products (locally store, on client machine, the ids of the articles)
+4. genereates itinerary (GET/POST the stand ids, solve the TSP)
+
+The MVP implements an algorithm that solves TSP. In the beginning we will use mock data, basically we (the devs) will visit a market and make some measurements of it, populating the database.
+
+The last operation is heavy and generates high costs. We could make a POST and return a job id instead. When the job is done, obviously the client will be able to inspect it further.
+
+#### v0 (MVP - customer APIs):
+
+1. LIST products of stores (paginated)
+2. POST wanted articles
+
+#### v1 (customer & store APIs):
+
+0. GET nearby stores
+1. CRUD for brand, store, floor, edge, node
+2. CRUD for product, article, stand
+
+#### v2 (store APIs):
+
+0. CRUD operating, break, event
+
+#### v3 (store APIs):
+
+0. CRUD - offer, discount, dependency, period
+
+### Future ideas:
+
+- store APIs should be available only to signed representatives of those; it means that some sort of authentication needs to be implemented starting with v1 => database schema update to cache client information and registrations.
+- the idea above could be extended to cache for each client his generated itiniraries.
+- actual store navigation could be possible.
+
+# Model
+
+## Core Conventions
+
+- **LIST vs GET**: `LIST` returns a paginated collection based on filters; `GET` retrieves a single resource by ID.
+- **PUT vs PATCH**: `PUT` is used for **Composite Upserts** (replacing/ensuring the resource state); `PATCH` is used for **Partial Updates** (modifying specific fields).
+- **Pagination**: All `LIST` methods return a standardized wrapper: `{ items: [], nextToken: String, total: Int }`.
+- **Mapping Immutability**: `Nodes` and `Edges` are immutable once created. Any change to a store layout involves a batch update that replaces the mapping version.
+
+---
+
+## 1. Outlet (Stores & Brands)
+
+_Management of physical locations and brand identity._
+
+### Stores
+
+- **POST** `/stores` - Create a new store instance.
+- **LIST** `/stores` - Find stores by filters.
+- **GET** `/stores/{storeId}` - Details including operating hours and floor count.
+- **PUT** `/stores/{storeId}` - Contains mapping updates.
+- **DELETE** `/stores/{storeId}` - **[CASCADING]** Removes all related `Floors`, `Nodes`, `Edges`, and `Stands`. Does NOT delete `Articles`.
+
+### Brands
+
+- **POST** `/brands` - Register a new brand (e.g., Lidl).
+- **GET** `/brands/{brandId}` - Retrieve brand name and logo url.
+- **PATCH** `/brands/{brandId}` - Update name or logo url.
+- **DELETE** `/brands/{brandId}` - **[RESTRICTED]** Only allowed if no `Stores` or `Articles` are linked to this brand.
+
+---
+
+## 2. Inventory (Stands & Articles)
+
+_Management of products on shelves._
+
+### Stands (In Store Placement)
+
+- **POST** `/stores/{storeId}/stands` - **[COMPOSITE]** Creates a stand. Internally creates `Product`/`Article` if metadata is provided and they are missing.
+- **LIST** `/stores/{storeId}/stands` - Returns all articles currently on shelves.
+- **GET** `/stores/{storeId}/stands/{standId}` - Specific shelf location and product info.
+- **PATCH** `/stores/{storeId}/stands/{standId}` - Update stand position or associated article.
+- **DELETE** `/stores/{storeId}/stands/{standId}` - **[SAFE]** Removes the item from the shelf. `Article` and `Product` persist in the catalog.
+
+### Catalog (Brand Level & Global)
+
+- **POST** `/brands/{brandId}/articles` - Define a product's price for a brand.
+- **GET** `/brands/{brandId}/articles` - Returns the article details and price.
+- **PATCH** `/brands/{brandId}/articles/{articleId}` - Changes the base price.
+- **DELETE** `/brands/{brandId}/articles/{articleId}` - **[RESTRICTED]** Denied if the article is currently placed on a `Stand`.
+- **POST** `/catalog/products` - Create a global product definition.
+
+---
+
+## 3. Marketing
+
+- **POST** `/stores/{storeId}/offers` - Create a new promotion. Links `Article` and `Discount` tables internally.
+- **LIST** `/stores/{storeId}/offers` - View all active promotions for a specific store.
+- **GET** `/stores/{storeId}/offers/{offerId}` - Detailed breakdown of discount percentages and dependencies.
+- **PUT** `/stores/{storeId}/offers/{offerId}` - Modify lifetime, percentage or affected articles.
+- **DELETE** `/stores/{storeId}/offers/{offerId}` - **[LOGICAL]** Marks the offer as expired.
+
+---
+
+### References
+
 - https://smithy.io/2.0/quickstart.html
 - https://github.com/Vldddddd1/InAndOut/issues/6
-
-The complete API model:
-```
-outlets/
-├── brand
-├── store
-└── floor
-mapping/
-├── node
-└── edge
-availability/
-├── operating
-├── break
-└── events
-catalog/
-├── product
-├── article
-└── stand
-marketing/
-├── dependency
-├── discount
-├── offer
-└── period
-```
