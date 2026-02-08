@@ -14,6 +14,7 @@ list UUIDList {
 @pattern("^[a-zA-Z0-9\\- ]+$")
 string ResourceName
 
+// todo pattern
 string ImageUrl
 
 @length(min: 8, max: 64)
