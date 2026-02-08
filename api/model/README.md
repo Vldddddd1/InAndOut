@@ -95,15 +95,6 @@ The last operation is heavy and generates high costs. We could make a POST and r
 
 # Model
 
-## Core Conventions
-
-- **LIST vs GET**: `LIST` returns a paginated collection based on filters; `GET` retrieves a single resource by ID.
-- **PUT vs PATCH**: `PUT` is used for **Composite Upserts** (replacing/ensuring the resource state); `PATCH` is used for **Partial Updates** (modifying specific fields).
-- **Pagination**: All `LIST` methods return a standardized wrapper: `{ items: [], nextToken: String, total: Int }`.
-- **Mapping Immutability**: `Nodes` and `Edges` are immutable once created. Any change to a store layout involves a batch update that replaces the mapping version.
-
----
-
 ## 1. Outlet (Stores & Brands)
 
 _Management of physical locations and brand identity._
@@ -111,8 +102,8 @@ _Management of physical locations and brand identity._
 ### Stores
 
 - **POST** `/stores` - Create a new store instance.
-- **LIST** `/stores` - Find stores by filters.
 - **GET** `/stores/{storeId}` - Details including operating hours and floor count.
+- **LIST** `/stores` - Find stores by filters.
 - **PUT** `/stores/{storeId}` - Contains mapping updates.
 - **DELETE** `/stores/{storeId}` - **[CASCADING]** Removes all related `Floors`, `Nodes`, `Edges`, and `Stands`. Does NOT delete `Articles`.
 
@@ -132,8 +123,8 @@ _Management of products on shelves._
 ### Stands (In Store Placement)
 
 - **POST** `/stores/{storeId}/stands` - **[COMPOSITE]** Creates a stand. Internally creates `Product`/`Article` if metadata is provided and they are missing.
-- **LIST** `/stores/{storeId}/stands` - Returns all articles currently on shelves.
 - **GET** `/stores/{storeId}/stands/{standId}` - Shelf location, price, and product info (includes data from `GET article`).
+- **LIST** `/stores/{storeId}/stands` - Returns all articles currently on shelves.
 - **PATCH** `/stores/{storeId}/stands/{standId}` - Update stand position or associated article.
 - **DELETE** `/stores/{storeId}/stands/{standId}` - **[SAFE]** Removes the item from the shelf. `Article` and `Product` persist in the catalog.
 
@@ -150,8 +141,8 @@ _Management of products on shelves._
 ## 3. Marketing
 
 - **POST** `/stores/{storeId}/offers` - Create a new promotion. Links `Article` and `Discount` tables internally.
-- **LIST** `/stores/{storeId}/offers` - View all active promotions for a specific store.
 - **GET** `/stores/{storeId}/offers/{offerId}` - Detailed breakdown of discount percentages and dependencies.
+- **LIST** `/stores/{storeId}/offers` - View all active promotions for a specific store.
 - **PUT** `/stores/{storeId}/offers/{offerId}` - Modify lifetime, percentage or affected articles.
 - **DELETE** `/stores/{storeId}/offers/{offerId}` - **[LOGICAL]** Marks the offer as expired.
 
