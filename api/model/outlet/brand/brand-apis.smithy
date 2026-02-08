@@ -2,7 +2,13 @@ $version: "2"
 
 namespace shopping.inandout.outlet.brand
 
+use shopping.inandout#DeleteRestrictedError
+use shopping.inandout#ImageUrl
+use shopping.inandout#InternalServerError
 use shopping.inandout#InvalidInputError
+use shopping.inandout#ResourceAlreadyExistsError
+use shopping.inandout#ResourceName
+use shopping.inandout#ResourceNotFoundError
 use shopping.inandout#UUID
 
 resource Brand {
@@ -10,8 +16,8 @@ resource Brand {
         brandId: UUID
     }
     properties: {
-        name: String
-        logoUrl: String
+        name: ResourceName
+        logoUrl: ImageUrl
     }
     create: CreateBrand
     read: GetBrand
@@ -25,6 +31,8 @@ operation CreateBrand {
     output: CreateBrandOutput
     errors: [
         InvalidInputError
+        ResourceAlreadyExistsError
+        InternalServerError
     ]
 }
 
@@ -34,7 +42,9 @@ operation GetBrand {
     input: GetBrandInput
     output: GetBrandOutput
     errors: [
-        ResourceNotFound
+        InvalidInputError
+        ResourceNotFoundError
+        InternalServerError
     ]
 }
 
@@ -44,8 +54,9 @@ operation UpdateBrand {
     input: UpdateBrandInput
     output: UpdateBrandOutput
     errors: [
-        ResourceNotFound
         InvalidInputError
+        ResourceNotFoundError
+        InternalServerError
     ]
 }
 
@@ -55,6 +66,9 @@ operation DeleteBrand {
     input: DeleteBrandInput
     output: DeleteBrandOutput
     errors: [
-        ResourceNotFound
+        InvalidInputError
+        ResourceNotFoundError
+        DeleteRestrictedError
+        InternalServerError
     ]
 }

@@ -2,9 +2,17 @@ $version: "2"
 
 namespace shopping.inandout.outlet.store
 
+use shopping.inandout#DeleteRestrictedError
 use shopping.inandout#Description
+use shopping.inandout#ImageUrl
+use shopping.inandout#InternalServerError
 use shopping.inandout#InvalidInputError
-use shopping.inandout#Name
+use shopping.inandout#Latitude
+use shopping.inandout#Longitude
+use shopping.inandout#MappingVersion
+use shopping.inandout#ResourceAlreadyExistsError
+use shopping.inandout#ResourceName
+use shopping.inandout#ResourceNotFoundError
 use shopping.inandout#UTCTimezone
 use shopping.inandout#UUID
 
@@ -13,15 +21,16 @@ resource Store {
         storeId: UUID
     }
     properties: {
-        name: Name
+        name: ResourceName
         description: Description
         brandId: UUID
-        imageUrl: String
+        imageUrl: ImageUrl
         timezone: UTCTimezone
-        operatingHours: OperatingHoursMap
-        longitude: Float
-        latitude: Float
-        navigationMap: Integer
+        operatingHoursMap: OperatingHoursMap
+        locationMapping: LocationMapping
+        mappingVersion: MappingVersion
+        longitude: Longitude
+        latitude: Latitude
     }
     create: CreateStore
     read: GetStore
@@ -36,27 +45,44 @@ operation CreateStore {
     output: CreateStoreOutput
     errors: [
         InvalidInputError
+        ResourceAlreadyExistsError
+        InternalServerError
     ]
 }
 
 @readonly
-@http(method: "GET", uri: "/v0/stores?storeId")
+@http(method: "GET", uri: "/v0/stores/{storeId}")
 operation GetStore {
     input: GetStoreInput
     output: GetStoreOutput
     errors: [
-        ResourceNotFound
+        InvalidInputError
+        ResourceNotFoundError
+        InternalServerError
     ]
 }
 
-@idempotent
+@readonly
+@paginated
+@http(method: "GET", uri: "/v0/stores")
+operation ListStores {
+    input: ListStoresInput
+    output: ListStoresOutput
+    errors: [
+        InvalidInputError
+        InternalServerError
+    ]
+}
+
 @http(method: "PUT", uri: "/v0/stores/{storeId}")
+@documentation("Non-idempotent operation, creates/deletes internal resources as needed")
 operation UpdateStore {
     input: UpdateStoreInput
     output: UpdateStoreOutput
     errors: [
-        ResourceNotFound
         InvalidInputError
+        ResourceNotFoundError
+        InternalServerError
     ]
 }
 
@@ -66,14 +92,9 @@ operation DeleteStore {
     input: DeleteStoreInput
     output: DeleteStoreOutput
     errors: [
-        ResourceNotFound
+        InvalidInputError
+        ResourceNotFoundError
+        DeleteRestrictedError
+        InternalServerError
     ]
-}
-
-@readonly
-@http(method: "GET", uri: "/v0/stores")
-@paginated(inputToken: "nextToken", outputToken: "nextToken", pageSize: "pageSize")
-operation ListStores {
-    input: ListStoresInput
-    output: ListStoresOutput
 }

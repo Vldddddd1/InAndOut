@@ -8,13 +8,11 @@ structure CreateBrandInput {
     @required
     name: String
 
+    @required
     logoUrl: String
 }
 
-structure CreateBrandOutput {
-    @required
-    brandId: UUID
-}
+structure CreateBrandOutput {}
 
 structure GetBrandInput {
     @required
@@ -29,6 +27,7 @@ structure GetBrandOutput {
     @required
     name: String
 
+    @required
     logoUrl: String
 }
 

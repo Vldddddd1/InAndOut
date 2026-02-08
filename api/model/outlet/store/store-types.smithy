@@ -2,88 +2,34 @@ $version: "2"
 
 namespace shopping.inandout.outlet.store
 
+use shopping.inandout#DayType
+use shopping.inandout#Description
+use shopping.inandout#ImageUrl
+use shopping.inandout#Latitude
+use shopping.inandout#Longitude
+use shopping.inandout#ResourceName
+use shopping.inandout#TimeRange
+use shopping.inandout#UTCTimezone
 use shopping.inandout#UUID
-use shopping.inandout#pagination
-
-structure CreateStoreInput {
-    @required
-    brandId: UUID
-
-    @required
-    name: String
-
-    @required
-    address: String
-}
-
-structure CreateStoreOutput {
-    @required
-    storeId: UUID
-}
-
-structure GetStoreInput {
-    @required
-    @httpLabel
-    storeId: UUID
-}
-
-structure GetStoreOutput {
-    @required
-    store: StoreSummary
-}
-
-structure StoreSummary {
-    @required
-    storeId: UUID
-
-    @required
-    name: String
-
-    @required
-    brandId: UUID
-
-    @required
-    address: String
-
-    operatingHours: OperatingHoursMap
-
-    floorCount: Integer
-}
 
 map OperatingHoursMap {
-    key: String
-    value: String
+    key: DayType
+    value: TimeRange
 }
 
-structure UpdateStoreInput {
-    @required
-    @httpLabel
-    storeId: UUID
-
-    // Contains mapping updates
-    mapping: MappingUpdate
+structure LocationMapping {
+    floorList: FloorList
 }
 
-structure MappingUpdate {
-    nodes: NodeList
-    edges: EdgeList
+list FloorList {
+    member: Floor
 }
 
-list NodeList {
-    member: Node
-}
-
-structure Node {
+structure Floor {
     @required
-    id: UUID
+    floorId: UUID
 
-    @required
-    x: Integer
-
-    @required
-    y: Integer
-
-    label: String
+    edgeList: EdgeList
 }
 
 list EdgeList {
@@ -92,35 +38,41 @@ list EdgeList {
 
 structure Edge {
     @required
-    startNodeId: UUID
+    sourceNodeId: UUID
 
     @required
-    endNodeId: UUID
+    targetNodeId: UUID
 
-    distance: Integer
+    name: Integer
+
+    weight: Double
 }
 
-structure UpdateStoreOutput {}
-
-structure DeleteStoreInput {
+@documentation("Also retrieves data of the associated brand")
+structure StoreSummary {
     @required
-    @httpLabel
-    storeId: UUID
-}
+    name: ResourceName
 
-structure DeleteStoreOutput {}
-
-structure ListStoresInput with [pagination] {}
-
-structure ListStoresOutput {
     @required
-    items: StoreList
+    timezone: UTCTimezone
 
-    nextToken: String
+    @required
+    brandName: UUID
 
-    total: Integer
+    @required
+    brandLogoUrl: ImageUrl
+
+    description: Description
+
+    imageUrl: ImageUrl
+
+    operatingHoursMap: OperatingHoursMap
+
+    longitude: Longitude
+
+    latitude: Latitude
 }
 
-list StoreList {
+list StoreSummaryList {
     member: StoreSummary
 }
