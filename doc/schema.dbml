@@ -11,6 +11,9 @@ Table brand {
   id int [not null, pk, increment]
   name varchar(63) [not null]
   logo_url varchar(255) [not null]
+
+  created_at datetime [not null]
+  updated_at datetime [not null]
 }
 
 Table store {
@@ -28,6 +31,9 @@ Table store {
   mapping_version int [not null, default: 0, increment, note: "Used to validate cached TSP solutions."]
   longitude double
   latitude double
+
+  created_at datetime [not null]
+  updated_at datetime [not null]
 
   indexes {
     name
@@ -195,6 +201,9 @@ Table article {
   
   price double [not null, note: "Base price decided by the brand; may be increased/decreased by stores."]
   currency varchar(255)
+  
+  created_at datetime [not null]
+  updated_at datetime [not null]
 }
 
 Table stand {
@@ -205,6 +214,9 @@ Table stand {
   article_id int [not null, ref: > article.id]
 
   source_node_distance int [not null]
+
+  created_at datetime [not null]
+  updated_at datetime [not null]
 
   indexes {
     (edge_id, article_id) [pk]
@@ -235,8 +247,10 @@ Table offer {
   store_id int [ref: > store.id, note: "If null, the offer applies to all stores of a brand."]
 
   percentage int [not null]
-  created_at datetime [not null]
   lifetime datetime
+  
+  created_at datetime [not null]
+  updated_at datetime [not null]
 }
 
 Table dependency {
