@@ -133,14 +133,14 @@ _Management of products on shelves._
 
 - **POST** `/stores/{storeId}/stands` - **[COMPOSITE]** Creates a stand. Internally creates `Product`/`Article` if metadata is provided and they are missing.
 - **LIST** `/stores/{storeId}/stands` - Returns all articles currently on shelves.
-- **GET** `/stores/{storeId}/stands/{standId}` - Specific shelf location and product info.
+- **GET** `/stores/{storeId}/stands/{standId}` - Shelf location, price, and product info (includes data from `GET article`).
 - **PATCH** `/stores/{storeId}/stands/{standId}` - Update stand position or associated article.
 - **DELETE** `/stores/{storeId}/stands/{standId}` - **[SAFE]** Removes the item from the shelf. `Article` and `Product` persist in the catalog.
 
 ### Catalog (Brand Level & Global)
 
 - **POST** `/brands/{brandId}/articles` - Define a product's price for a brand.
-- **GET** `/brands/{brandId}/articles` - Returns the article details and price.
+- **GET** `/brands/{brandId}/articles/{articleId}` - Returns the article details and price.
 - **PATCH** `/brands/{brandId}/articles/{articleId}` - Changes the base price.
 - **DELETE** `/brands/{brandId}/articles/{articleId}` - **[RESTRICTED]** Denied if the article is currently placed on a `Stand`.
 - **POST** `/catalog/products` - Create a global product definition.

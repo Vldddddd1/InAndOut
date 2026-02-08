@@ -1,8 +1,8 @@
 $version: "2"
 
-namespace com.inandout.common
+namespace shopping.inandout
 
-@regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+@pattern("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 @length(min: 32, max: 32)
 string UUID
 
@@ -10,42 +10,21 @@ list UUIDList {
     member: UUID
 }
 
-// Pagination
-trait pagination {
+@length(min: 3, max: 32)
+@pattern("^[a-zA-Z0-9\\- ]+$")
+string Name
+
+@length(min: 8, max: 64)
+@pattern("^[a-zA-Z0-9\\-, ]+$")
+string Description
+
+// All UTC offsets fall between this interval: [-12, 14].
+// See: https://en.wikipedia.org/wiki/List_of_UTC_offsets.
+@range(min: -12, max: 14)
+integer UTCTimezone
+
+@mixin
+structure pagination {
+    nextToken: String
     pageSize: Integer
-    pageToken: String
-}
-
-structure PageInfo {
-    nextPageToken: String
-}
-
-// Errors
-
-@error("client")
-structure ResourceNotFound {
-    @required
-    message: String
-    
-    resourceId: String
-}
-
-@error("client")
-structure ValidationException {
-    @required
-    message: String
-    
-    fieldList: ValidationExceptionFieldList
-}
-
-list ValidationExceptionFieldList {
-    member: ValidationExceptionField
-}
-
-structure ValidationExceptionField {
-    @required
-    path: String
-
-    @required
-    message: String
 }

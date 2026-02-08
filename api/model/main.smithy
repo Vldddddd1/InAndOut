@@ -1,46 +1,27 @@
 $version: "2"
 
-namespace com.inandout
+namespace shopping.inandout
 
-use com.inandout.common#UUID
-use com.inandout.common#UUIDList
-use com.inandout.catalog#Stand
+use shopping.inandout.catalog.article#Article
+use shopping.inandout.catalog.product#Product
+use shopping.inandout.catalog.stand#Stand
+use shopping.inandout.itinerary#CreateItinerary
+use shopping.inandout.marketing.offer#Offer
+use shopping.inandout.outlet.brand#Brand
+use shopping.inandout.outlet.store#Store
 
+@paginated(inputToken: "nextToken", outputToken: "nextToken", pageSize: "pageSize")
 service InAndOut {
-    version: "2024-04-01"
-    resources: [Stand]
+    version: "2026-04-01"
+    resources: [
+        Store
+        Brand
+        Stand
+        Article
+        Product
+        Offer
+    ]
     operations: [
         CreateItinerary
     ]
-}
-
-@http(method: "POST", uri: "/itinerary")
-operation CreateItinerary {
-    input: CreateItineraryInput
-    output: CreateItineraryOutput
-    // todo errors: []
-}
-
-structure CreateItineraryInput {
-    @required
-    @httpLabel
-    storeId: UUID
-
-    @required
-    articleIds: UUIDList
-}
-
-structure CreateItineraryOutput {
-    @required
-    jobId: UUID
-
-    @required
-    status: JobStatus
-}
-
-enum JobStatus {
-    QUEUED = "queued"
-    PROCESSING = "processing"
-    COMPLETED = "completed"
-    FAILED = "failed"
 }
