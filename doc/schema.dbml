@@ -1,7 +1,8 @@
 // Syntax documentation: https://dbml.dbdiagram.io/docs/
+// Visualization: https://dbdiagram.io/d/InAndOut-693154e7d6676488ba8f6f4d
 
 //////////////////////////////////////////////////////
-// STORE STRUCTURE SECTION
+// OUTLET - STORE STRUCTURE SECTION
 //////////////////////////////////////////////////////
 
 Table brand {
@@ -23,6 +24,8 @@ Table store {
   name varchar(63) [note: "A store might alter the brand name. e.g. Lidl -> Lidl Poland."]
   description varchar(255) [note: "Anything, maybe some navigation suggestions."]
   image_url varchar(255) [note: "If not provided, the brand logo is displayed instead."]
+  
+  mapping_version int [not null, default: 0, increment, note: "Used to validate cached TSP solutions."]
   longitude double
   latitude double
 
@@ -48,7 +51,7 @@ Table floor {
 }
 
 //////////////////////////////////////////////////////
-// LOCATION REPRESENTATION SECTION
+// MAPPING - LOCATION REPRESENTATION SECTION
 //////////////////////////////////////////////////////
 
 Table edge {
@@ -100,7 +103,7 @@ Table node {
 }
 
 //////////////////////////////////////////////////////
-// STORE AVAILABILITY SECTION
+// (STORE) AVAILABILITY SECTION
 //////////////////////////////////////////////////////
 
 Enum day_type {
@@ -162,7 +165,7 @@ Table break {
 }
 
 //////////////////////////////////////////////////////
-// PRODUCT SECTION
+// CATALOG - PRODUCT SECTION
 //////////////////////////////////////////////////////
 
 Table product {
@@ -209,7 +212,7 @@ Table stand {
 }
 
 //////////////////////////////////////////////////////
-// DISCOUNT SECTION
+// MARKETING - DISCOUNT SECTION
 //////////////////////////////////////////////////////
 
 Table discount {
