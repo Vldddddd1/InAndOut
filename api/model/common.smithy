@@ -12,7 +12,9 @@ list UUIDList {
 
 @length(min: 3, max: 32)
 @pattern("^[a-zA-Z0-9\\- ]+$")
-string Name
+string ResourceName
+
+string ImageUrl
 
 @length(min: 8, max: 64)
 @pattern("^[a-zA-Z0-9\\-, ]+$")
@@ -23,8 +25,32 @@ string Description
 @range(min: -12, max: 14)
 integer UTCTimezone
 
+enum DayType {
+    MON = "MON"
+    TUE = "TUE"
+    WED = "WED"
+    THU = "THU"
+    FRI = "FRI"
+    SAT = "SAT"
+    SUN = "SUN"
+}
+
+structure TimeRange {
+    begin: Timestamp
+    end: Timestamp
+}
+
+@range(min: 0)
+integer MappingVersion
+
+@range(min: -180, max: 180)
+double Longitude
+
+@range(min: -90, max: 90)
+double Latitude
+
 @mixin
-structure pagination {
+structure Pagination {
     nextToken: String
-    pageSize: Integer
+    tokenCount: Integer
 }
