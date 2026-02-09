@@ -2,8 +2,9 @@ $version: "2"
 
 namespace shopping.inandout.catalog.article
 
+use shopping.inandout#PositiveDouble
 use shopping.inandout#UUID
-use shopping.inandout.catalog#ProductInput
+use shopping.inandout.catalog.product#ProductInput
 
 structure CreateArticleInput {
     @required
@@ -51,10 +52,7 @@ structure UpdateArticleInput {
     @httpLabel
     articleId: UUID
 
-    @documentation("Create a new product")
-    productInput: ProductInput
-
-    price: Double
+    price: PositiveDouble
 
     currency: String
 }

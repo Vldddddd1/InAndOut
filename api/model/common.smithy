@@ -77,9 +77,11 @@ structure TimeRange {
 @mixin
 @documentation("Parameters sent by the client to control pagination of the list results")
 structure InputPagination {
+    @httpQuery("nextToken")
     @documentation("An id used to retrieve the next page of results; leave empty for the first request")
     nextToken: String
 
+    @httpQuery("pageSize")
     @default(100)
     @documentation("The maximum number of items the client is requesting to be returned in this page")
     pageSize: NaturalNumber

@@ -4,6 +4,7 @@ namespace shopping.inandout.catalog.stand
 
 use shopping.inandout#InternalServerError
 use shopping.inandout#InvalidInputError
+use shopping.inandout#PositiveDouble
 use shopping.inandout#ResourceAlreadyExistsError
 use shopping.inandout#ResourceNotFoundError
 use shopping.inandout#UUID
@@ -15,7 +16,7 @@ resource Stand {
     properties: {
         edgeId: UUID
         articleId: UUID
-        sourceNodeDistance: Integer
+        sourceNodeDistance: PositiveDouble
         createdAt: Timestamp
         updatedAt: Timestamp
     }

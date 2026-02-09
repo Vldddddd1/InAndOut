@@ -6,7 +6,6 @@ use shopping.inandout#Description
 use shopping.inandout#ImageUrl
 use shopping.inandout#ResourceName
 use shopping.inandout#UUID
-use shopping.inandout.catalog#ProductSummary
 
 structure CreateProductInput {
     @required

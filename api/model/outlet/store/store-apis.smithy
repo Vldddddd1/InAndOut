@@ -25,7 +25,7 @@ resource Store {
         name: ResourceName
         description: Description
         imageUrl: ImageUrl
-        brandSummary: BrandSummary
+        brandId: BrandSummary
         timezone: UTCTimezone
         operatingHoursMap: OperatingHoursMap
         locationMapping: LocationMapping

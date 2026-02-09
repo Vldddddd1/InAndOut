@@ -5,6 +5,7 @@ namespace shopping.inandout.catalog.stand
 use shopping.inandout#InputPagination
 use shopping.inandout#OutputPagination
 use shopping.inandout#UUID
+use shopping.inandout.catalog.article#ArticleInput
 
 structure CreateStandInput {
     @required
@@ -15,10 +16,13 @@ structure CreateStandInput {
     edgeId: UUID
 
     @required
+    sourceNodeDistance: Integer
+
+    @documentation("Existing article referenced in a new stand")
     articleId: UUID
 
-    @required
-    sourceNodeDistance: Integer
+    @documentation("Create a new article as well")
+    articleInput: ArticleInput
 }
 
 structure CreateStandOutput {
@@ -66,6 +70,8 @@ structure UpdateStandInput {
     @required
     @httpLabel
     standId: UUID
+
+    edgeId: UUID
 
     sourceNodeDistance: Integer
 }

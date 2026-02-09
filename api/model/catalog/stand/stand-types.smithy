@@ -3,7 +3,9 @@ $version: "2"
 namespace shopping.inandout.catalog.stand
 
 use shopping.inandout#AuditMetadata
+use shopping.inandout#PositiveDouble
 use shopping.inandout#UUID
+use shopping.inandout.catalog.article#ArticleSummary
 
 structure StandSummary with [AuditMetadata] {
     @required
@@ -13,10 +15,10 @@ structure StandSummary with [AuditMetadata] {
     edgeId: UUID
 
     @required
-    articleId: UUID
+    artileSummary: ArticleSummary
 
     @required
-    sourceNodeDistance: Integer
+    sourceNodeDistance: PositiveDouble
 }
 
 list StandSummaryList {

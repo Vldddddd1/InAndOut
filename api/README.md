@@ -108,10 +108,10 @@ _Management of physical locations and brand identity._
 ### Stores
 
 - **POST** `/stores` - Create a new store instance.
-- **GET** `/stores/{storeId}` - Details including operating hours and floor count.
-- **LIST** `/stores` - Find stores by filters.
-- **PATCH** `/stores/{storeId}` - **[CASCADING]** Contains mapping updates.
-- **DELETE** `/stores/{storeId}` - **[CASCADING]** Removes all related `Floors`, `Nodes`, `Edges`, and `Stands`. Does NOT delete `Articles`.
+- **GET** `/stores/{storeId}` - **[CASCADING]** Details including operating hours and its **brand**.
+- **LIST** `/stores` - **[CASCADING]** Find stores by filters and their **brands**.
+- **PATCH** `/stores/{storeId}` - **[CASCADING]** Contains **mapping** updates (`Floors`, `Nodes`, `Edges`, and `Stands`).
+- **DELETE** `/stores/{storeId}` - **[CASCADING]** Removes all **mapping**.
 
 ### Brands
 

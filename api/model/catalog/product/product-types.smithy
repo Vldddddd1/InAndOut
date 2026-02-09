@@ -1,6 +1,6 @@
 $version: "2"
 
-namespace shopping.inandout.catalog
+namespace shopping.inandout.catalog.product
 
 use shopping.inandout#AuditMetadata
 use shopping.inandout#Description
