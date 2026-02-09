@@ -9,8 +9,8 @@ Table brand {
   note: "A brand (e.g. Lidl) having one or multiple physical stores."
 
   id int [not null, pk, increment]
-  name varchar(63) [not null]
-  logo_url varchar(255) [not null]
+  name varchar2(63) [not null]
+  logo_url varchar2(255)
 
   created_at datetime [not null]
   updated_at datetime [not null]
@@ -24,9 +24,9 @@ Table store {
 
   timezone int [not null, default: 2, note: "Encoded as UCT+<this value>."]
   
-  name varchar(63) [note: "A store might alter the brand name. e.g. Lidl -> Lidl Poland."]
-  description varchar(255) [note: "Anything, maybe some navigation suggestions."]
-  image_url varchar(255) [note: "If not provided, the brand logo is displayed instead."]
+  name varchar2(63) [note: "A store might alter the brand name. e.g. Lidl -> Lidl Poland."]
+  description varchar2(255) [note: "Anything, maybe some navigation suggestions."]
+  image_url varchar2(255) [note: "If not provided, the brand logo is displayed instead."]
   
   mapping_version int [not null, default: 0, increment, note: "Used to validate cached TSP solutions."]
   longitude double
@@ -71,7 +71,7 @@ Table edge {
   source_node_id int [not null, ref: > node.id]
   target_node_id int [not null, ref: > node.id]
 
-  name varchar(63) [note: "e.g. \"milk corridor\"."]
+  name varchar2(63) [note: "e.g. \"milk corridor\"."]
   weight int
 
   checks {
@@ -84,13 +84,13 @@ Table edge {
 }
 
 Enum node_type {
-  navigation [note: "Either store corners or aisle intersections."]
+  NAVIGATION [note: "Either store corners or aisle intersections."]
 
   // Should be defined for all floor except the highest one.
-  elevation [note: "An elevator or staircase to the level above."]
+  ELEVATION [note: "An elevator or staircase to the level above."]
   // Should be defined for all floors except the lowest one.
   // This schema could also describe a store with underground levels.
-  descent [note: "An elevator or staircase to the level below."]
+  DESCENT [note: "An elevator or staircase to the level below."]
 }
 
 Table node {
@@ -99,9 +99,8 @@ Table node {
   id int [not null, pk, increment]
   floor_id int [not null, ref: > floor.id]
 
-  number int [not null]
-  type node_type [not null, default: node_type.navigation]
-  name varchar(63) [note: "e.g. \"Start of the principal corridor\", \"Milk-toys intersection\"."]
+  name varchar2(63) [not null, note: "e.g. \"Start of the principal corridor\", \"Milk-toys intersection\"."]
+  type node_type [not null, default: node_type.NAVIGATION]
 
   indexes {
     floor_id
@@ -151,8 +150,8 @@ Table event {
   begin date [not null]
   end date [not null]
 
-  name varchar(63)
-  description varchar(255)
+  name varchar2(63)
+  description varchar2(255)
 
   checks {
     `begin.year == end.year` [name: 'chk_valid_event']
@@ -179,13 +178,16 @@ Table product {
 
   id int [not null, pk, increment]
   
-  variant varchar(63) [note: "e.g. almond milk."]
-  subcategory varchar(63) [not null, note: "e.g. milk."]
-  category varchar(63) [not null, note: "e.g. dairy products."]
+  name varchar2(63) [not null, note: "e.g. almond milk."]
+  subcategory varchar2(63) [not null, note: "e.g. milk."]
+  category varchar2(63) [not null, note: "e.g. dairy products."]
 
-  vendor varchar(63) [note: "e.g. Zuzu, Alpro, etc."]
-  image_url varchar(255)
-  description varchar(255)
+  vendor varchar2(63) [note: "e.g. Zuzu, Alpro, etc."]
+  image_url varchar2(255)
+  description varchar2(255)
+
+  created_at datetime [not null]
+  updated_at datetime [not null]
 
   indexes {
     vendor
@@ -200,7 +202,7 @@ Table article {
   brand_id int [not null, ref: > brand.id]
   
   price double [not null, note: "Base price decided by the brand; may be increased/decreased by stores."]
-  currency varchar(255)
+  currency varchar2(255)
   
   created_at datetime [not null]
   updated_at datetime [not null]
