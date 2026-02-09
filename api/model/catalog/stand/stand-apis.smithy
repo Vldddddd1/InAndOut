@@ -62,7 +62,7 @@ operation ListStands {
     ]
 }
 
-@http(method: "PUT", uri: "/v0/stands/{standId}")
+@http(method: "PATCH", uri: "/v0/stands/{standId}")
 operation UpdateStand {
     input: UpdateStandInput
     output: UpdateStandOutput

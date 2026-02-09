@@ -51,7 +51,7 @@ operation GetBrand {
 }
 
 @idempotent
-@http(method: "PATCH", uri: "/v0/brands/{brandId}")
+@http(method: "PUT", uri: "/v0/brands/{brandId}")
 operation UpdateBrand {
     input: UpdateBrandInput
     output: UpdateBrandOutput
@@ -64,6 +64,7 @@ operation UpdateBrand {
 
 @idempotent
 @http(method: "DELETE", uri: "/v0/brands/{brandId}")
+@documentation("Restricted cascading operation, references for stores and articles should NOT exist")
 operation DeleteBrand {
     input: DeleteBrandInput
     output: DeleteBrandOutput

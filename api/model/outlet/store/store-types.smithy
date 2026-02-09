@@ -51,6 +51,17 @@ structure Edge {
 }
 
 @documentation("Internally computes the distance between the store and user's device")
+structure IsOpenQuery {
+    @required
+    @httpQuery("isOpenNow")
+    isOpenNow: Boolean
+
+    @required
+    @httpQuery("userTimezone")
+    userTimezone: UTCTimezone
+}
+
+@documentation("Internally computes the distance between the store and user's device")
 structure UserDistanceQuery {
     @required
     @httpQuery("maxDistance")
@@ -72,14 +83,13 @@ structure StoreSummary with [AuditMetadata] {
     name: ResourceName
 
     @required
-    timezone: UTCTimezone
-
-    @required
     brandSummary: BrandSummary
 
     description: Description
 
     imageUrl: ImageUrl
+
+    timezone: UTCTimezone
 
     operatingHoursMap: OperatingHoursMap
 

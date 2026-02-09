@@ -63,7 +63,7 @@ operation ListArticles {
     ]
 }
 
-@http(method: "PUT", uri: "/v0/articles/{articleId}")
+@http(method: "PATCH", uri: "/v0/articles/{articleId}")
 operation UpdateArticle {
     input: UpdateArticleInput
     output: UpdateArticleOutput

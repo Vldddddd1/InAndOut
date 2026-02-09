@@ -2,7 +2,6 @@ $version: "2"
 
 namespace shopping.inandout.outlet.store
 
-use shopping.inandout#DeleteRestrictedError
 use shopping.inandout#Description
 use shopping.inandout#ImageUrl
 use shopping.inandout#InternalServerError
@@ -25,8 +24,8 @@ resource Store {
         name: ResourceName
         description: Description
         imageUrl: ImageUrl
-        timezone: UTCTimezone
         brandSummary: BrandSummary
+        timezone: UTCTimezone
         operatingHoursMap: OperatingHoursMap
         locationMapping: LocationMapping
         mappingVersion: NaturalNumber
@@ -79,8 +78,8 @@ operation ListStores {
     ]
 }
 
-@http(method: "PUT", uri: "/v0/stores/{storeId}")
-@documentation("Non-idempotent operation, creates/deletes internal resources as needed")
+@http(method: "PATCH", uri: "/v0/stores/{storeId}")
+@documentation("Non-idempotent cascading operation, creates/deletes internal resources as needed")
 operation UpdateStore {
     input: UpdateStoreInput
     output: UpdateStoreOutput
@@ -93,13 +92,13 @@ operation UpdateStore {
 
 @idempotent
 @http(method: "DELETE", uri: "/v0/stores/{storeId}")
+@documentation("Not restricted cascading operation, deletes floors, stands, etc.")
 operation DeleteStore {
     input: DeleteStoreInput
     output: DeleteStoreOutput
     errors: [
         InvalidInputError
         ResourceNotFoundError
-        DeleteRestrictedError
         InternalServerError
     ]
 }

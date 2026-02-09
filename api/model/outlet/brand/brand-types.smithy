@@ -7,6 +7,8 @@ use shopping.inandout#ImageUrl
 use shopping.inandout#ResourceName
 
 structure BrandSummary with [AuditMetadata] {
+    @required
     name: ResourceName
+
     logoUrl: ImageUrl
 }

@@ -19,11 +19,11 @@ structure CreateStoreInput {
     @required
     name: ResourceName
 
-    timezone: UTCTimezone
-
     description: Description
 
     imageUrl: ImageUrl
+
+    timezone: UTCTimezone
 
     longitude: Longitude
 
@@ -51,11 +51,8 @@ structure ListStoresInput with [InputPagination] {
     @httpQuery("name")
     name: ResourceName
 
-    @httpQuery("isOpenNow")
-    isOpenNow: Boolean
-
-    @httpQuery("userTimezone")
-    userTimezone: UTCTimezone
+    @documentation("If provided all the subfields must be fulfilled")
+    isOpenQuery: IsOpenQuery
 
     @documentation("If provided all the subfields must be fulfilled")
     userDistanceQuery: UserDistanceQuery
@@ -77,12 +74,21 @@ structure UpdateStoreInput {
 
     imageUrl: ImageUrl
 
+    timezone: UTCTimezone
+
     operatingHoursMap: OperatingHoursMap
 
     locationMapping: LocationMapping
+
+    longitude: Longitude
+
+    latitude: Latitude
 }
 
-structure UpdateStoreOutput {}
+structure UpdateStoreOutput {
+    @required
+    storeSummary: StoreSummary
+}
 
 structure DeleteStoreInput {
     @required

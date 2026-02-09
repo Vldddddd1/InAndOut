@@ -2,14 +2,12 @@ $version: "2"
 
 namespace shopping.inandout.outlet.brand
 
-use shopping.inandout#AuditMetadata
 use shopping.inandout#UUID
 
 structure CreateBrandInput {
     @required
     name: String
 
-    @required
     logoUrl: String
 }
 
@@ -21,15 +19,9 @@ structure GetBrandInput {
     brandId: UUID
 }
 
-structure GetBrandOutput with [AuditMetadata] {
+structure GetBrandOutput {
     @required
-    brandId: UUID
-
-    @required
-    name: String
-
-    @required
-    logoUrl: String
+    brandSummary: BrandSummary
 }
 
 structure UpdateBrandInput {
@@ -42,7 +34,10 @@ structure UpdateBrandInput {
     logoUrl: String
 }
 
-structure UpdateBrandOutput {}
+structure UpdateBrandOutput {
+    @required
+    brandSummary: BrandSummary
+}
 
 structure DeleteBrandInput {
     @required

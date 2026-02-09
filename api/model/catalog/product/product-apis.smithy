@@ -69,7 +69,7 @@ operation ListProducts {
 }
 
 @idempotent
-@http(method: "PUT", uri: "/v0/products/{productId}")
+@http(method: "PATCH", uri: "/v0/products/{productId}")
 operation UpdateProduct {
     input: UpdateProductInput
     output: UpdateProductOutput

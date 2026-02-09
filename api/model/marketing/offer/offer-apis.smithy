@@ -63,7 +63,7 @@ operation ListOffers {
     output: ListOffersOutput
 }
 
-@http(method: "PUT", uri: "/v0/stores/{storeId}/offers/{offerId}")
+@http(method: "PATCH", uri: "/v0/stores/{storeId}/offers/{offerId}")
 operation UpdateOffer {
     input: UpdateOfferInput
     output: UpdateOfferOutput
