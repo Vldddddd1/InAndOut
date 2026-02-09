@@ -57,7 +57,6 @@ structure Node {
     @required
     number: Integer
 
-    @required
     type: NodeType
 
     name: ResourceName
@@ -71,6 +70,9 @@ enum NodeType {
 
 @documentation("Also retrieves data of the associated brand")
 structure StoreSummary with [AuditMetadata] {
+    @required
+    storeId: UUID
+
     @required
     name: ResourceName
 

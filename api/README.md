@@ -111,7 +111,7 @@ _Management of physical locations and brand identity._
 
 - **POST** `/brands` - Register a new brand (e.g., Lidl).
 - **GET** `/brands/{brandId}` - Retrieve brand name and logo url.
-- **PUT** `/brands/{brandId}` - Update name or logo url.
+- **PATCH** `/brands/{brandId}` - Update name or logo url.
 - **DELETE** `/brands/{brandId}` - **[RESTRICTED]** Only allowed if no `Stores` or `Articles` are linked to this brand.
 
 ---
@@ -140,7 +140,7 @@ _Management of products on shelves._
 
 ## 3. Marketing
 
-- **POST** `/stores/{storeId}/offers` - Create a new promotion. Links `Article` and `Discount` tables internally.
+- **POST** `/stores/{storeId}/offers` - **[CASCADING]** Create a new promotion. Links `Article` and `Discount` tables internally.
 - **GET** `/stores/{storeId}/offers/{offerId}` - Detailed breakdown of discount percentages and dependencies.
 - **LIST** `/stores/{storeId}/offers` - View all active promotions for a specific store.
 - **PATCH** `/stores/{storeId}/offers/{offerId}` - **[CASCADING]** Modify lifetime, percentage or affected articles.

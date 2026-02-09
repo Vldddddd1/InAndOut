@@ -3,8 +3,12 @@ $version: "2"
 namespace shopping.inandout.marketing.offer
 
 use shopping.inandout#InputPagination
+use shopping.inandout#NaturalNumber
 use shopping.inandout#OutputPagination
+use shopping.inandout#Percentage
+use shopping.inandout#TimeRange
 use shopping.inandout#UUID
+use shopping.inandout#UUIDList
 
 structure CreateOfferInput {
     @required
@@ -12,12 +16,15 @@ structure CreateOfferInput {
     storeId: UUID
 
     @required
-    articleId: UUID
+    percentage: Percentage
 
-    @required
-    discount: Integer
+    articleIdList: UUIDList
 
-    lifetime: String
+    dependencyList: DependencyList
+
+    timeRange: TimeRange
+
+    lifetime: NaturalNumber
 }
 
 structure CreateOfferOutput {
@@ -37,18 +44,18 @@ structure GetOfferInput {
 
 structure GetOfferOutput {
     @required
-    offerId: UUID
+    offerSummary: OfferSummary
+}
 
+structure ListOffersInput with [InputPagination] {
     @required
+    @httpLabel
     storeId: UUID
+}
 
+structure ListOffersOutput with [OutputPagination] {
     @required
-    articleId: UUID
-
-    @required
-    discount: Integer
-
-    lifetime: String
+    tokens: OfferSummaryList
 }
 
 structure UpdateOfferInput {
@@ -60,14 +67,21 @@ structure UpdateOfferInput {
     @httpLabel
     offerId: UUID
 
-    articleId: UUID
+    percentage: Percentage
 
-    discount: Integer
+    articleIdList: UUIDList
 
-    lifetime: String
+    dependencyList: DependencyList
+
+    timeRange: TimeRange
+
+    lifetime: NaturalNumber
 }
 
-structure UpdateOfferOutput {}
+structure UpdateOfferOutput {
+    @required
+    offerSummary: OfferSummary
+}
 
 structure DeleteOfferInput {
     @required
@@ -80,31 +94,3 @@ structure DeleteOfferInput {
 }
 
 structure DeleteOfferOutput {}
-
-structure ListOffersInput with [InputPagination] {
-    @required
-    @httpLabel
-    storeId: UUID
-}
-
-structure ListOffersOutput with [OutputPagination] {
-    @required
-    tokens: OfferList
-}
-
-list OfferList {
-    member: OfferSummary
-}
-
-structure OfferSummary {
-    @required
-    offerId: UUID
-
-    @required
-    articleId: UUID
-
-    @required
-    discount: Integer
-
-    lifetime: String
-}

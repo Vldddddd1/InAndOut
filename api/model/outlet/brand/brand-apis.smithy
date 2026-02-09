@@ -50,8 +50,7 @@ operation GetBrand {
     ]
 }
 
-@idempotent
-@http(method: "PUT", uri: "/v0/brands/{brandId}")
+@http(method: "PATCH", uri: "/v0/brands/{brandId}")
 operation UpdateBrand {
     input: UpdateBrandInput
     output: UpdateBrandOutput

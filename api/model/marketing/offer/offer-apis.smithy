@@ -2,9 +2,9 @@ $version: "2"
 
 namespace shopping.inandout.marketing.offer
 
-use shopping.inandout#DeleteRestrictedError
 use shopping.inandout#InternalServerError
 use shopping.inandout#InvalidInputError
+use shopping.inandout#NaturalNumber
 use shopping.inandout#Percentage
 use shopping.inandout#ResourceAlreadyExistsError
 use shopping.inandout#ResourceNotFoundError
@@ -12,6 +12,7 @@ use shopping.inandout#TimeRange
 use shopping.inandout#UUID
 use shopping.inandout#UUIDList
 
+// Does NOT contain the store data, only its id is necessary for logical grouping.
 resource Offer {
     identifiers: {
         offerId: UUID
@@ -21,9 +22,10 @@ resource Offer {
         articleIdList: UUIDList
         dependencyList: DependencyList
         percentage: Percentage
-        createdAt: Integer
-        lifetime: String
         timeRange: TimeRange
+        lifetime: NaturalNumber
+        createdAt: Timestamp
+        updatedAt: Timestamp
     }
     create: CreateOffer
     read: GetOffer
@@ -61,9 +63,14 @@ operation GetOffer {
 operation ListOffers {
     input: ListOffersInput
     output: ListOffersOutput
+    errors: [
+        InvalidInputError
+        InternalServerError
+    ]
 }
 
 @http(method: "PATCH", uri: "/v0/stores/{storeId}/offers/{offerId}")
+@documentation("Non-idempotent cascading operation, creates/deletes internal resources as needed")
 operation UpdateOffer {
     input: UpdateOfferInput
     output: UpdateOfferOutput
@@ -76,13 +83,13 @@ operation UpdateOffer {
 
 @idempotent
 @http(method: "DELETE", uri: "/v0/stores/{storeId}/offers/{offerId}")
+@documentation("Not restricted cascading operation, deletes discounts, dependencies, etc.")
 operation DeleteOffer {
     input: DeleteOfferInput
     output: DeleteOfferOutput
     errors: [
         InvalidInputError
         ResourceNotFoundError
-        DeleteRestrictedError
         InternalServerError
     ]
 }

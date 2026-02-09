@@ -16,6 +16,7 @@ use shopping.inandout#UTCTimezone
 use shopping.inandout#UUID
 use shopping.inandout.outlet.brand#BrandSummary
 
+// Contains brand summary since this data is also often required alongside the store info.
 resource Store {
     identifiers: {
         storeId: UUID
