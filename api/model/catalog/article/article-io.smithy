@@ -2,22 +2,24 @@ $version: "2"
 
 namespace shopping.inandout.catalog.article
 
-use shopping.inandout#InputPagination
-use shopping.inandout#OutputPagination
 use shopping.inandout#UUID
+use shopping.inandout.catalog#ProductInput
 
 structure CreateArticleInput {
     @required
-    productId: UUID
-
-    @required
+    @httpLabel
     brandId: UUID
 
     @required
     price: Double
 
-    @required
     currency: String
+
+    @documentation("Existing product referenced in a new article")
+    productId: UUID
+
+    @documentation("Create a new product as well")
+    productInput: ProductInput
 }
 
 structure CreateArticleOutput {
@@ -28,6 +30,10 @@ structure CreateArticleOutput {
 structure GetArticleInput {
     @required
     @httpLabel
+    brandId: UUID
+
+    @required
+    @httpLabel
     articleId: UUID
 }
 
@@ -36,32 +42,33 @@ structure GetArticleOutput {
     articleSummary: ArticleSummary
 }
 
-structure ListArticlesInput with [InputPagination] {
-    @httpQuery("productId")
-    productId: UUID
-
-    @httpQuery("brandId")
-    brandId: UUID
-}
-
-structure ListArticlesOutput with [OutputPagination] {
-    @required
-    tokens: ArticleSummaryList
-}
-
 structure UpdateArticleInput {
     @required
     @httpLabel
+    brandId: UUID
+
+    @required
+    @httpLabel
     articleId: UUID
+
+    @documentation("Create a new product")
+    productInput: ProductInput
 
     price: Double
 
     currency: String
 }
 
-structure UpdateArticleOutput {}
+structure UpdateArticleOutput {
+    @required
+    articleSummary: ArticleSummary
+}
 
 structure DeleteArticleInput {
+    @required
+    @httpLabel
+    brandId: UUID
+
     @required
     @httpLabel
     articleId: UUID

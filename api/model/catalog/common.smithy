@@ -1,19 +1,16 @@
 $version: "2"
 
-namespace shopping.inandout.catalog.product
+namespace shopping.inandout.catalog
 
-use shopping.inandout#AuditMetadata
 use shopping.inandout#Description
 use shopping.inandout#ImageUrl
 use shopping.inandout#ResourceName
 use shopping.inandout#UUID
 
-structure ProductSummary with [AuditMetadata] {
+@mixin
+structure ProductMixin {
     @required
-    productId: UUID
-
-    @required
-    variant: ResourceName
+    name: ResourceName
 
     @required
     subcategory: ResourceName
@@ -21,7 +18,6 @@ structure ProductSummary with [AuditMetadata] {
     @required
     category: ResourceName
 
-    @required
     vendor: ResourceName
 
     imageUrl: ImageUrl
@@ -29,6 +25,9 @@ structure ProductSummary with [AuditMetadata] {
     description: Description
 }
 
-list ProductSummaryList {
-    member: ProductSummary
+structure ProductInput with [ProductMixin] {}
+
+structure ProductSummary with [ProductMixin] {
+    @required
+    productId: UUID
 }

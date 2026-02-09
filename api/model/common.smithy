@@ -6,16 +6,16 @@ namespace shopping.inandout
 @length(min: 32, max: 32)
 string UUID
 
-@length(min: 3, max: 63)
 @pattern("^[a-zA-Z0-9\\- ]+$")
+@length(min: 3, max: 63)
 string ResourceName
 
 @pattern("^https?://[a-zA-Z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]+\\.(jpg|jpeg|png|gif)$")
 @length(min: 8, max: 255)
 string ImageUrl
 
-@length(min: 8, max: 255)
 @pattern("^[a-zA-Z0-9\\-, ]+$")
+@length(min: 8, max: 255)
 string Description
 
 // All UTC offsets fall between this interval: [-12, 14].
@@ -40,6 +40,9 @@ double Percentage
 
 @range(min: 0)
 integer NaturalNumber
+
+@range(min: 0)
+double PositiveDouble
 
 enum DayType {
     MON = "MON"

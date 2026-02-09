@@ -3,25 +3,22 @@ $version: "2"
 namespace shopping.inandout.catalog.article
 
 use shopping.inandout#AuditMetadata
+use shopping.inandout#PositiveDouble
 use shopping.inandout#UUID
+use shopping.inandout.catalog#ProductSummary
 
 structure ArticleSummary with [AuditMetadata] {
-    @required
-    articleId: UUID
-
-    @required
-    productId: UUID
-
     @required
     brandId: UUID
 
     @required
-    price: Double
+    articleId: UUID
 
     @required
-    currency: String
-}
+    productSummary: ProductSummary
 
-list ArticleSummaryList {
-    member: ArticleSummary
+    @required
+    price: PositiveDouble
+
+    currency: String
 }

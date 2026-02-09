@@ -5,30 +5,31 @@ namespace shopping.inandout.catalog.article
 use shopping.inandout#DeleteRestrictedError
 use shopping.inandout#InternalServerError
 use shopping.inandout#InvalidInputError
+use shopping.inandout#PositiveDouble
 use shopping.inandout#ResourceAlreadyExistsError
 use shopping.inandout#ResourceNotFoundError
 use shopping.inandout#UUID
+use shopping.inandout.catalog#ProductSummary
 
 resource Article {
     identifiers: {
         articleId: UUID
     }
     properties: {
-        productId: UUID
+        productSummary: ProductSummary
         brandId: UUID
-        price: Double
+        price: PositiveDouble
         currency: String
         createdAt: Timestamp
         updatedAt: Timestamp
     }
     create: CreateArticle
     read: GetArticle
-    list: ListArticles
     update: UpdateArticle
     delete: DeleteArticle
 }
 
-@http(method: "POST", uri: "/v0/articles")
+@http(method: "POST", uri: "/v0/brands/{brandId}/articles")
 operation CreateArticle {
     input: CreateArticleInput
     output: CreateArticleOutput
@@ -40,7 +41,7 @@ operation CreateArticle {
 }
 
 @readonly
-@http(method: "GET", uri: "/v0/articles/{articleId}")
+@http(method: "GET", uri: "/v0/brands/{brandId}/articles/{articleId}")
 operation GetArticle {
     input: GetArticleInput
     output: GetArticleOutput
@@ -51,19 +52,7 @@ operation GetArticle {
     ]
 }
 
-@readonly
-@paginated
-@http(method: "GET", uri: "/v0/articles")
-operation ListArticles {
-    input: ListArticlesInput
-    output: ListArticlesOutput
-    errors: [
-        InvalidInputError
-        InternalServerError
-    ]
-}
-
-@http(method: "PATCH", uri: "/v0/articles/{articleId}")
+@http(method: "PATCH", uri: "/v0/brands/{brandId}/articles/{articleId}")
 operation UpdateArticle {
     input: UpdateArticleInput
     output: UpdateArticleOutput
@@ -75,7 +64,8 @@ operation UpdateArticle {
 }
 
 @idempotent
-@http(method: "DELETE", uri: "/v0/articles/{articleId}")
+@http(method: "DELETE", uri: "/v0/brands/{brandId}/articles/{articleId}")
+@documentation("Restricted cascading operation, references for stands should NOT exist")
 operation DeleteArticle {
     input: DeleteArticleInput
     output: DeleteArticleOutput

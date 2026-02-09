@@ -122,19 +122,18 @@ _Management of products on shelves._
 
 ### Stands (In Store Placement)
 
-- **POST** `/stores/{storeId}/stands` - **[COMPOSITE]** Creates a stand. Internally creates `Product`/`Article` if metadata is provided and they are missing.
+- **POST** `/stores/{storeId}/stands` - **[CASCADING]** Creates a stand. Internally creates `Product`/`Article` if metadata is provided and they are missing.
 - **GET** `/stores/{storeId}/stands/{standId}` - Shelf location, price, and product info (includes data from `GET article`).
 - **LIST** `/stores/{storeId}/stands` - Returns all articles currently on shelves.
-- **PUT** `/stores/{storeId}/stands/{standId}` - Update stand position or associated article.
-- **DELETE** `/stores/{storeId}/stands/{standId}` - **[SAFE]** Removes the item from the shelf. `Article` and `Product` persist in the catalog.
+- **PATCH** `/stores/{storeId}/stands/{standId}` - **[CASCADING]** Update stand position or associated article.
+- **DELETE** `/stores/{storeId}/stands/{standId}` - Removes the item from the shelf. `Article` and `Product` persist in the catalog.
 
 ### Catalog (Brand Level & Global)
 
-- **POST** `/brands/{brandId}/articles` - Define a product's price for a brand.
+- **POST** `/brands/{brandId}/articles` - **[CASCADING]** Define a product's price for a brand.
 - **GET** `/brands/{brandId}/articles/{articleId}` - Returns the article details and price.
-- **PUT** `/brands/{brandId}/articles/{articleId}` - Changes the base price.
-- **DELETE** `/brands/{brandId}/articles/{articleId}` - **[RESTRICTED]** Denied if the article is currently placed on a `Stand`.
-- **POST** `/catalog/products` - Create a global product definition.
+- **PATCH** `/brands/{brandId}/articles/{articleId}` - **[CASCADING]** Changes the base price.
+- **DELETE** `/brands/{brandId}/articles/{articleId}` - **[RESTRICTED]** Denied if the article is currently placed on a `Stand`, does not delete products.
 
 ---
 
