@@ -22,8 +22,11 @@ string Description
 @range(min: -12, max: 14)
 integer UTCTimezone
 
-@range(min: 0)
-integer NaturalNumber
+@range(min: 0, max: 59)
+integer Minute
+
+@range(min: 0, max: 23)
+integer Hour
 
 @range(min: -180, max: 180)
 double Longitude
@@ -33,6 +36,9 @@ double Latitude
 
 @range(min: 0, max: 100)
 double Percentage
+
+@range(min: 0)
+integer NaturalNumber
 
 enum DayType {
     MON = "MON"
@@ -48,9 +54,20 @@ list UUIDList {
     member: UUID
 }
 
+structure Time {
+    @required
+    hour: Hour
+
+    @required
+    minute: Minute
+}
+
 structure TimeRange {
-    begin: Timestamp
-    end: Timestamp
+    @required
+    begin: Time
+
+    @required
+    end: Time
 }
 
 @mixin

@@ -31,6 +31,9 @@ structure Floor {
     @required
     floorId: UUID
 
+    @required
+    level: Byte
+
     edgeList: EdgeList
 }
 
@@ -40,14 +43,30 @@ list EdgeList {
 
 structure Edge {
     @required
-    sourceNodeId: UUID
+    sourceNode: Node
 
     @required
-    targetNodeId: UUID
+    targetNode: Node
 
-    name: Integer
+    name: ResourceName
 
     weight: Double
+}
+
+structure Node {
+    @required
+    number: Integer
+
+    @required
+    type: NodeType
+
+    name: ResourceName
+}
+
+enum NodeType {
+    NAVIGATION = "NAVIGATION"
+    ELEVATION = "ELEVATION"
+    DESCENT = "DESCENT"
 }
 
 @documentation("Also retrieves data of the associated brand")

@@ -26,6 +26,10 @@ structure CreateStoreInput {
 
     timezone: UTCTimezone
 
+    operatingHoursMap: OperatingHoursMap
+
+    locationMapping: LocationMapping
+
     longitude: Longitude
 
     latitude: Latitude
