@@ -12,7 +12,7 @@ structure CreateArticleInput {
     brandId: UUID
 
     @required
-    price: Double
+    price: PositiveDouble
 
     currency: String
 
