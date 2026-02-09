@@ -29,7 +29,7 @@ resource Article {
     delete: DeleteArticle
 }
 
-@http(method: "POST", uri: "/v0/brands/{brandId}/articles")
+@http(method: "POST", uri: "/brands/{brandId}/articles")
 operation CreateArticle {
     input: CreateArticleInput
     output: CreateArticleOutput
@@ -41,7 +41,7 @@ operation CreateArticle {
 }
 
 @readonly
-@http(method: "GET", uri: "/v0/brands/{brandId}/articles/{articleId}")
+@http(method: "GET", uri: "/brands/{brandId}/articles/{articleId}")
 operation GetArticle {
     input: GetArticleInput
     output: GetArticleOutput
@@ -52,7 +52,7 @@ operation GetArticle {
     ]
 }
 
-@http(method: "PATCH", uri: "/v0/brands/{brandId}/articles/{articleId}")
+@http(method: "PATCH", uri: "/brands/{brandId}/articles/{articleId}")
 operation UpdateArticle {
     input: UpdateArticleInput
     output: UpdateArticleOutput
@@ -64,7 +64,7 @@ operation UpdateArticle {
 }
 
 @idempotent
-@http(method: "DELETE", uri: "/v0/brands/{brandId}/articles/{articleId}")
+@http(method: "DELETE", uri: "/brands/{brandId}/articles/{articleId}")
 @documentation("Restricted cascading operation, references for stands should NOT exist")
 operation DeleteArticle {
     input: DeleteArticleInput

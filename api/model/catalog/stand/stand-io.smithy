@@ -8,6 +8,10 @@ use shopping.inandout#UUID
 
 structure CreateStandInput {
     @required
+    @httpLabel
+    storeId: UUID
+
+    @required
     edgeId: UUID
 
     @required
@@ -25,6 +29,10 @@ structure CreateStandOutput {
 structure GetStandInput {
     @required
     @httpLabel
+    storeId: UUID
+
+    @required
+    @httpLabel
     standId: UUID
 }
 
@@ -34,6 +42,10 @@ structure GetStandOutput {
 }
 
 structure ListStandsInput with [InputPagination] {
+    @required
+    @httpLabel
+    storeId: UUID
+
     @httpQuery("edgeId")
     edgeId: UUID
 
@@ -49,14 +61,25 @@ structure ListStandsOutput with [OutputPagination] {
 structure UpdateStandInput {
     @required
     @httpLabel
+    storeId: UUID
+
+    @required
+    @httpLabel
     standId: UUID
 
     sourceNodeDistance: Integer
 }
 
-structure UpdateStandOutput {}
+structure UpdateStandOutput {
+    @required
+    standSummary: StandSummary
+}
 
 structure DeleteStandInput {
+    @required
+    @httpLabel
+    storeId: UUID
+
     @required
     @httpLabel
     standId: UUID

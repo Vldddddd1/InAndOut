@@ -42,7 +42,7 @@ resource Store {
     delete: DeleteStore
 }
 
-@http(method: "POST", uri: "/v0/stores")
+@http(method: "POST", uri: "/stores")
 operation CreateStore {
     input: CreateStoreInput
     output: CreateStoreOutput
@@ -54,7 +54,7 @@ operation CreateStore {
 }
 
 @readonly
-@http(method: "GET", uri: "/v0/stores/{storeId}")
+@http(method: "GET", uri: "/stores/{storeId}")
 @documentation("Returns additional brand details in order to avoid multiple network round-trips")
 operation GetStore {
     input: GetStoreInput
@@ -68,7 +68,7 @@ operation GetStore {
 
 @readonly
 @paginated
-@http(method: "GET", uri: "/v0/stores")
+@http(method: "GET", uri: "/stores")
 @documentation("Returns additional brand details in order to avoid multiple network round-trips")
 operation ListStores {
     input: ListStoresInput
@@ -79,7 +79,7 @@ operation ListStores {
     ]
 }
 
-@http(method: "PATCH", uri: "/v0/stores/{storeId}")
+@http(method: "PATCH", uri: "/stores/{storeId}")
 @documentation("Non-idempotent cascading operation, creates/deletes internal resources as needed")
 operation UpdateStore {
     input: UpdateStoreInput
@@ -92,7 +92,7 @@ operation UpdateStore {
 }
 
 @idempotent
-@http(method: "DELETE", uri: "/v0/stores/{storeId}")
+@http(method: "DELETE", uri: "/stores/{storeId}")
 @documentation("Not restricted cascading operation, deletes floors, stands, etc.")
 operation DeleteStore {
     input: DeleteStoreInput

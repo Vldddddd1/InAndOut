@@ -2,7 +2,6 @@ $version: "2"
 
 namespace shopping.inandout.catalog.stand
 
-use shopping.inandout#DeleteRestrictedError
 use shopping.inandout#InternalServerError
 use shopping.inandout#InvalidInputError
 use shopping.inandout#ResourceAlreadyExistsError
@@ -27,7 +26,7 @@ resource Stand {
     delete: DeleteStand
 }
 
-@http(method: "POST", uri: "/v0/stands")
+@http(method: "POST", uri: "/stores/{storeId}/stands")
 operation CreateStand {
     input: CreateStandInput
     output: CreateStandOutput
@@ -39,7 +38,7 @@ operation CreateStand {
 }
 
 @readonly
-@http(method: "GET", uri: "/v0/stands/{standId}")
+@http(method: "GET", uri: "/stores/{storeId}/stands/{standId}")
 operation GetStand {
     input: GetStandInput
     output: GetStandOutput
@@ -52,7 +51,7 @@ operation GetStand {
 
 @readonly
 @paginated
-@http(method: "GET", uri: "/v0/stands")
+@http(method: "GET", uri: "/stores/{storeId}/stands")
 operation ListStands {
     input: ListStandsInput
     output: ListStandsOutput
@@ -62,7 +61,7 @@ operation ListStands {
     ]
 }
 
-@http(method: "PATCH", uri: "/v0/stands/{standId}")
+@http(method: "PATCH", uri: "/stores/{storeId}/stands/{standId}")
 operation UpdateStand {
     input: UpdateStandInput
     output: UpdateStandOutput
@@ -74,14 +73,13 @@ operation UpdateStand {
 }
 
 @idempotent
-@http(method: "DELETE", uri: "/v0/stands/{standId}")
+@http(method: "DELETE", uri: "/stores/{storeId}/stands/{standId}")
 operation DeleteStand {
     input: DeleteStandInput
     output: DeleteStandOutput
     errors: [
         InvalidInputError
         ResourceNotFoundError
-        DeleteRestrictedError
         InternalServerError
     ]
 }

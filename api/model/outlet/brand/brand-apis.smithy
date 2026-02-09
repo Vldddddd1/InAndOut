@@ -27,7 +27,7 @@ resource Brand {
     delete: DeleteBrand
 }
 
-@http(method: "POST", uri: "/v0/brands")
+@http(method: "POST", uri: "/brands")
 operation CreateBrand {
     input: CreateBrandInput
     output: CreateBrandOutput
@@ -39,7 +39,7 @@ operation CreateBrand {
 }
 
 @readonly
-@http(method: "GET", uri: "/v0/brands/{brandId}")
+@http(method: "GET", uri: "/brands/{brandId}")
 operation GetBrand {
     input: GetBrandInput
     output: GetBrandOutput
@@ -50,7 +50,7 @@ operation GetBrand {
     ]
 }
 
-@http(method: "PATCH", uri: "/v0/brands/{brandId}")
+@http(method: "PATCH", uri: "/brands/{brandId}")
 operation UpdateBrand {
     input: UpdateBrandInput
     output: UpdateBrandOutput
@@ -62,7 +62,7 @@ operation UpdateBrand {
 }
 
 @idempotent
-@http(method: "DELETE", uri: "/v0/brands/{brandId}")
+@http(method: "DELETE", uri: "/brands/{brandId}")
 @documentation("Restricted cascading operation, references for stores and articles should NOT exist")
 operation DeleteBrand {
     input: DeleteBrandInput

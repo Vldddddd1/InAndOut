@@ -2,6 +2,7 @@ $version: "2"
 
 namespace shopping.inandout.catalog
 
+use shopping.inandout#AuditMetadata
 use shopping.inandout#Description
 use shopping.inandout#ImageUrl
 use shopping.inandout#ResourceName
@@ -27,7 +28,7 @@ structure ProductMixin {
 
 structure ProductInput with [ProductMixin] {}
 
-structure ProductSummary with [ProductMixin] {
+structure ProductSummary with [ProductMixin, AuditMetadata] {
     @required
     productId: UUID
 }

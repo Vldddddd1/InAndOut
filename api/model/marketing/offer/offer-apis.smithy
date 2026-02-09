@@ -34,7 +34,7 @@ resource Offer {
     delete: DeleteOffer
 }
 
-@http(method: "POST", uri: "/v0/stores/{storeId}/offers")
+@http(method: "POST", uri: "/stores/{storeId}/offers")
 operation CreateOffer {
     input: CreateOfferInput
     output: CreateOfferOutput
@@ -46,7 +46,7 @@ operation CreateOffer {
 }
 
 @readonly
-@http(method: "GET", uri: "/v0/stores/{storeId}/offers/{offerId}")
+@http(method: "GET", uri: "/stores/{storeId}/offers/{offerId}")
 operation GetOffer {
     input: GetOfferInput
     output: GetOfferOutput
@@ -59,7 +59,7 @@ operation GetOffer {
 
 @readonly
 @paginated
-@http(method: "GET", uri: "/v0/stores/{storeId}/offers")
+@http(method: "GET", uri: "/stores/{storeId}/offers")
 operation ListOffers {
     input: ListOffersInput
     output: ListOffersOutput
@@ -69,7 +69,7 @@ operation ListOffers {
     ]
 }
 
-@http(method: "PATCH", uri: "/v0/stores/{storeId}/offers/{offerId}")
+@http(method: "PATCH", uri: "/stores/{storeId}/offers/{offerId}")
 @documentation("Non-idempotent cascading operation, creates/deletes internal resources as needed")
 operation UpdateOffer {
     input: UpdateOfferInput
@@ -82,7 +82,7 @@ operation UpdateOffer {
 }
 
 @idempotent
-@http(method: "DELETE", uri: "/v0/stores/{storeId}/offers/{offerId}")
+@http(method: "DELETE", uri: "/stores/{storeId}/offers/{offerId}")
 @documentation("Not restricted cascading operation, deletes discounts, dependencies, etc.")
 operation DeleteOffer {
     input: DeleteOfferInput
