@@ -2,9 +2,15 @@ $version: "2"
 
 namespace shopping.inandout.marketing.offer
 
+use shopping.inandout#DeleteRestrictedError
+use shopping.inandout#InternalServerError
 use shopping.inandout#InvalidInputError
-use shopping.inandout#ResourceNotFound
+use shopping.inandout#Percentage
+use shopping.inandout#ResourceAlreadyExistsError
+use shopping.inandout#ResourceNotFoundError
+use shopping.inandout#TimeRange
 use shopping.inandout#UUID
+use shopping.inandout#UUIDList
 
 resource Offer {
     identifiers: {
@@ -12,15 +18,18 @@ resource Offer {
     }
     properties: {
         storeId: UUID
-        articleId: UUID
-        discount: Integer
+        articleIdList: UUIDList
+        dependencyList: DependencyList
+        percentage: Percentage
+        createdAt: Integer
         lifetime: String
+        timeRange: TimeRange
     }
     create: CreateOffer
     read: GetOffer
+    list: ListOffers
     update: UpdateOffer
     delete: DeleteOffer
-    list: ListOffers
 }
 
 @http(method: "POST", uri: "/v0/stores/{storeId}/offers")
@@ -29,6 +38,8 @@ operation CreateOffer {
     output: CreateOfferOutput
     errors: [
         InvalidInputError
+        ResourceAlreadyExistsError
+        InternalServerError
     ]
 }
 
@@ -38,18 +49,28 @@ operation GetOffer {
     input: GetOfferInput
     output: GetOfferOutput
     errors: [
-        ResourceNotFound
+        InvalidInputError
+        ResourceNotFoundError
+        InternalServerError
     ]
 }
 
-@idempotent
+@readonly
+@paginated
+@http(method: "GET", uri: "/v0/stores/{storeId}/offers")
+operation ListOffers {
+    input: ListOffersInput
+    output: ListOffersOutput
+}
+
 @http(method: "PUT", uri: "/v0/stores/{storeId}/offers/{offerId}")
 operation UpdateOffer {
     input: UpdateOfferInput
     output: UpdateOfferOutput
     errors: [
-        ResourceNotFound
         InvalidInputError
+        ResourceNotFoundError
+        InternalServerError
     ]
 }
 
@@ -59,14 +80,9 @@ operation DeleteOffer {
     input: DeleteOfferInput
     output: DeleteOfferOutput
     errors: [
-        ResourceNotFound
+        InvalidInputError
+        ResourceNotFoundError
+        DeleteRestrictedError
+        InternalServerError
     ]
-}
-
-@readonly
-@http(method: "GET", uri: "/v0/stores/{storeId}/offers")
-@paginated(inputToken: "nextToken", outputToken: "nextToken", pageSize: "pageSize")
-operation ListOffers {
-    input: ListOffersInput
-    output: ListOffersOutput
 }

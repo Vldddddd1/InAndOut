@@ -2,6 +2,7 @@ $version: "2"
 
 namespace shopping.inandout.outlet.store
 
+use shopping.inandout#AuditMetadata
 use shopping.inandout#DayType
 use shopping.inandout#Description
 use shopping.inandout#ImageUrl
@@ -49,7 +50,7 @@ structure Edge {
 }
 
 @documentation("Also retrieves data of the associated brand")
-structure StoreSummary {
+structure StoreSummary with [AuditMetadata] {
     @required
     name: ResourceName
 

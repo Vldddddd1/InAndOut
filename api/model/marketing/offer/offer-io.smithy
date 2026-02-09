@@ -2,8 +2,8 @@ $version: "2"
 
 namespace shopping.inandout.marketing.offer
 
+use shopping.inandout#Pagination
 use shopping.inandout#UUID
-use shopping.inandout#pagination
 
 structure CreateOfferInput {
     @required
@@ -80,7 +80,7 @@ structure DeleteOfferInput {
 
 structure DeleteOfferOutput {}
 
-structure ListOffersInput with [pagination] {
+structure ListOffersInput with [Pagination] {
     @required
     @httpLabel
     storeId: UUID

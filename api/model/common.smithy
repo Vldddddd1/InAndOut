@@ -6,15 +6,11 @@ namespace shopping.inandout
 @length(min: 32, max: 32)
 string UUID
 
-list UUIDList {
-    member: UUID
-}
-
 @length(min: 3, max: 32)
 @pattern("^[a-zA-Z0-9\\- ]+$")
 string ResourceName
 
-// todo pattern
+@pattern("^https?://[a-zA-Z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]+\\.(jpg|jpeg|png|gif)$")
 string ImageUrl
 
 @length(min: 8, max: 64)
@@ -26,6 +22,18 @@ string Description
 @range(min: -12, max: 14)
 integer UTCTimezone
 
+@range(min: 0)
+integer NaturalNumber
+
+@range(min: -180, max: 180)
+double Longitude
+
+@range(min: -90, max: 90)
+double Latitude
+
+@range(min: 0, max: 100)
+double Percentage
+
 enum DayType {
     MON = "MON"
     TUE = "TUE"
@@ -36,22 +44,23 @@ enum DayType {
     SUN = "SUN"
 }
 
+list UUIDList {
+    member: UUID
+}
+
 structure TimeRange {
     begin: Timestamp
     end: Timestamp
 }
 
-@range(min: 0)
-integer MappingVersion
-
-@range(min: -180, max: 180)
-double Longitude
-
-@range(min: -90, max: 90)
-double Latitude
-
 @mixin
 structure Pagination {
     nextToken: String
     tokenCount: Integer
+}
+
+@mixin
+structure AuditMetadata {
+    createdAt: Timestamp
+    updatedAt: Timestamp
 }

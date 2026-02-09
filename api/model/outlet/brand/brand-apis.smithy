@@ -18,6 +18,8 @@ resource Brand {
     properties: {
         name: ResourceName
         logoUrl: ImageUrl
+        createdAt: Timestamp
+        updatedAt: Timestamp
     }
     create: CreateBrand
     read: GetBrand

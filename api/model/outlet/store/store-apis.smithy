@@ -9,7 +9,7 @@ use shopping.inandout#InternalServerError
 use shopping.inandout#InvalidInputError
 use shopping.inandout#Latitude
 use shopping.inandout#Longitude
-use shopping.inandout#MappingVersion
+use shopping.inandout#NaturalNumber
 use shopping.inandout#ResourceAlreadyExistsError
 use shopping.inandout#ResourceName
 use shopping.inandout#ResourceNotFoundError
@@ -28,9 +28,11 @@ resource Store {
         timezone: UTCTimezone
         operatingHoursMap: OperatingHoursMap
         locationMapping: LocationMapping
-        mappingVersion: MappingVersion
+        mappingVersion: NaturalNumber
         longitude: Longitude
         latitude: Latitude
+        createdAt: Timestamp
+        updatedAt: Timestamp
     }
     create: CreateStore
     read: GetStore

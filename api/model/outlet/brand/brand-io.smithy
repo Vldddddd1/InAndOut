@@ -2,6 +2,7 @@ $version: "2"
 
 namespace shopping.inandout.outlet.brand
 
+use shopping.inandout#AuditMetadata
 use shopping.inandout#UUID
 
 structure CreateBrandInput {
@@ -20,7 +21,7 @@ structure GetBrandInput {
     brandId: UUID
 }
 
-structure GetBrandOutput {
+structure GetBrandOutput with [AuditMetadata] {
     @required
     brandId: UUID
 
