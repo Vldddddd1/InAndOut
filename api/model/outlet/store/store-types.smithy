@@ -50,33 +50,6 @@ structure Edge {
     weight: Double
 }
 
-@documentation("Internally computes the distance between the store and user's device")
-structure IsOpenQuery {
-    @required
-    @httpQuery("isOpenNow")
-    isOpenNow: Boolean
-
-    @required
-    @httpQuery("userTimezone")
-    userTimezone: UTCTimezone
-}
-
-@documentation("Internally computes the distance between the store and user's device")
-structure UserDistanceQuery {
-    @required
-    @httpQuery("maxDistance")
-    @documentation("If provided the server computes the n kilometers")
-    maxDistance: Integer
-
-    @required
-    @httpQuery("userLongitude")
-    userLongitude: Longitude
-
-    @required
-    @httpQuery("userLatitude")
-    userLatitude: Latitude
-}
-
 @documentation("Also retrieves data of the associated brand")
 structure StoreSummary with [AuditMetadata] {
     @required

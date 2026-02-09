@@ -7,6 +7,7 @@ use shopping.inandout#ImageUrl
 use shopping.inandout#InputPagination
 use shopping.inandout#Latitude
 use shopping.inandout#Longitude
+use shopping.inandout#NaturalNumber
 use shopping.inandout#OutputPagination
 use shopping.inandout#ResourceName
 use shopping.inandout#UTCTimezone
@@ -51,11 +52,19 @@ structure ListStoresInput with [InputPagination] {
     @httpQuery("name")
     name: ResourceName
 
-    @documentation("If provided all the subfields must be fulfilled")
-    isOpenQuery: IsOpenQuery
+    @httpQuery("userLongitude")
+    userLongitude: Longitude
 
-    @documentation("If provided all the subfields must be fulfilled")
-    userDistanceQuery: UserDistanceQuery
+    @httpQuery("userLatitude")
+    userLatitude: Latitude
+
+    // ! User location must be provided in order for the below queries to work.
+    @httpQuery("isOpen")
+    isOpen: Boolean
+
+    @httpQuery("maxDistance")
+    @documentation("Distance measured in kilometers")
+    maxDistance: NaturalNumber
 }
 
 structure ListStoresOutput with [OutputPagination] {

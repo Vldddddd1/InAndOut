@@ -143,8 +143,8 @@ _Management of products on shelves._
 - **POST** `/stores/{storeId}/offers` - Create a new promotion. Links `Article` and `Discount` tables internally.
 - **GET** `/stores/{storeId}/offers/{offerId}` - Detailed breakdown of discount percentages and dependencies.
 - **LIST** `/stores/{storeId}/offers` - View all active promotions for a specific store.
-- **PATCH** `/stores/{storeId}/offers/{offerId}` - Modify lifetime, percentage or affected articles.
-- **DELETE** `/stores/{storeId}/offers/{offerId}` - **[LOGICAL]** Marks the offer as expired.
+- **PATCH** `/stores/{storeId}/offers/{offerId}` - **[CASCADING]** Modify lifetime, percentage or affected articles.
+- **DELETE** `/stores/{storeId}/offers/{offerId}` - **[CASCADING]** Marks the offer as expired.
 
 ---
 
