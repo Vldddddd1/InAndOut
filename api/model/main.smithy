@@ -10,7 +10,7 @@ use shopping.inandout.marketing.offer#Offer
 use shopping.inandout.outlet.brand#Brand
 use shopping.inandout.outlet.store#Store
 
-@paginated(inputToken: "nextToken", outputToken: "nextToken", pageSize: "tokenCount", items: "tokens")
+@paginated(inputToken: "nextToken", outputToken: "nextToken", pageSize: "pageSize", items: "tokens")
 service InAndOut {
     version: "2026-04-01"
     resources: [

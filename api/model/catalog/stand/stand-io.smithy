@@ -2,7 +2,8 @@ $version: "2"
 
 namespace shopping.inandout.catalog.stand
 
-use shopping.inandout#Pagination
+use shopping.inandout#InputPagination
+use shopping.inandout#OutputPagination
 use shopping.inandout#UUID
 
 structure CreateStandInput {
@@ -32,7 +33,7 @@ structure GetStandOutput {
     standSummary: StandSummary
 }
 
-structure ListStandsInput with [Pagination] {
+structure ListStandsInput with [InputPagination] {
     @httpQuery("edgeId")
     edgeId: UUID
 
@@ -40,7 +41,7 @@ structure ListStandsInput with [Pagination] {
     articleId: UUID
 }
 
-structure ListStandsOutput with [Pagination] {
+structure ListStandsOutput with [OutputPagination] {
     @required
     tokens: StandSummaryList
 }

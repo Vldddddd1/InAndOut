@@ -12,6 +12,7 @@ use shopping.inandout#ResourceName
 use shopping.inandout#TimeRange
 use shopping.inandout#UTCTimezone
 use shopping.inandout#UUID
+use shopping.inandout.outlet.brand#BrandSummary
 
 map OperatingHoursMap {
     key: DayType
@@ -49,6 +50,22 @@ structure Edge {
     weight: Double
 }
 
+@documentation("Internally computes the distance between the store and user's device")
+structure UserDistanceQuery {
+    @required
+    @httpQuery("maxDistance")
+    @documentation("If provided the server computes the n kilometers")
+    maxDistance: Integer
+
+    @required
+    @httpQuery("userLongitude")
+    userLongitude: Longitude
+
+    @required
+    @httpQuery("userLatitude")
+    userLatitude: Latitude
+}
+
 @documentation("Also retrieves data of the associated brand")
 structure StoreSummary with [AuditMetadata] {
     @required
@@ -58,10 +75,7 @@ structure StoreSummary with [AuditMetadata] {
     timezone: UTCTimezone
 
     @required
-    brandName: UUID
-
-    @required
-    brandLogoUrl: ImageUrl
+    brandSummary: BrandSummary
 
     description: Description
 

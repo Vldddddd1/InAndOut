@@ -4,7 +4,8 @@ namespace shopping.inandout.catalog.product
 
 use shopping.inandout#Description
 use shopping.inandout#ImageUrl
-use shopping.inandout#Pagination
+use shopping.inandout#InputPagination
+use shopping.inandout#OutputPagination
 use shopping.inandout#ResourceName
 use shopping.inandout#UUID
 
@@ -42,7 +43,7 @@ structure GetProductOutput {
     productSummary: ProductSummary
 }
 
-structure ListProductsInput with [Pagination] {
+structure ListProductsInput with [InputPagination] {
     @httpQuery("category")
     category: ResourceName
 
@@ -53,7 +54,7 @@ structure ListProductsInput with [Pagination] {
     vendor: ResourceName
 }
 
-structure ListProductsOutput with [Pagination] {
+structure ListProductsOutput with [OutputPagination] {
     @required
     tokens: ProductSummaryList
 }

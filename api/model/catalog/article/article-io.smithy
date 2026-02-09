@@ -2,7 +2,8 @@ $version: "2"
 
 namespace shopping.inandout.catalog.article
 
-use shopping.inandout#Pagination
+use shopping.inandout#InputPagination
+use shopping.inandout#OutputPagination
 use shopping.inandout#UUID
 
 structure CreateArticleInput {
@@ -35,7 +36,7 @@ structure GetArticleOutput {
     articleSummary: ArticleSummary
 }
 
-structure ListArticlesInput with [Pagination] {
+structure ListArticlesInput with [InputPagination] {
     @httpQuery("productId")
     productId: UUID
 
@@ -43,7 +44,7 @@ structure ListArticlesInput with [Pagination] {
     brandId: UUID
 }
 
-structure ListArticlesOutput with [Pagination] {
+structure ListArticlesOutput with [OutputPagination] {
     @required
     tokens: ArticleSummaryList
 }

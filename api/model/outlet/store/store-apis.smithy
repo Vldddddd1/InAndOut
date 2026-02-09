@@ -15,6 +15,7 @@ use shopping.inandout#ResourceName
 use shopping.inandout#ResourceNotFoundError
 use shopping.inandout#UTCTimezone
 use shopping.inandout#UUID
+use shopping.inandout.outlet.brand#BrandSummary
 
 resource Store {
     identifiers: {
@@ -23,9 +24,9 @@ resource Store {
     properties: {
         name: ResourceName
         description: Description
-        brandId: UUID
         imageUrl: ImageUrl
         timezone: UTCTimezone
+        brandSummary: BrandSummary
         operatingHoursMap: OperatingHoursMap
         locationMapping: LocationMapping
         mappingVersion: NaturalNumber
@@ -54,6 +55,7 @@ operation CreateStore {
 
 @readonly
 @http(method: "GET", uri: "/v0/stores/{storeId}")
+@documentation("Returns additional brand details in order to avoid multiple network round-trips")
 operation GetStore {
     input: GetStoreInput
     output: GetStoreOutput
@@ -67,6 +69,7 @@ operation GetStore {
 @readonly
 @paginated
 @http(method: "GET", uri: "/v0/stores")
+@documentation("Returns additional brand details in order to avoid multiple network round-trips")
 operation ListStores {
     input: ListStoresInput
     output: ListStoresOutput

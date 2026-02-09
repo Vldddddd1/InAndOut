@@ -4,9 +4,10 @@ namespace shopping.inandout.outlet.store
 
 use shopping.inandout#Description
 use shopping.inandout#ImageUrl
+use shopping.inandout#InputPagination
 use shopping.inandout#Latitude
 use shopping.inandout#Longitude
-use shopping.inandout#Pagination
+use shopping.inandout#OutputPagination
 use shopping.inandout#ResourceName
 use shopping.inandout#UTCTimezone
 use shopping.inandout#UUID
@@ -18,7 +19,6 @@ structure CreateStoreInput {
     @required
     name: ResourceName
 
-    @required
     timezone: UTCTimezone
 
     description: Description
@@ -47,7 +47,7 @@ structure GetStoreOutput {
 }
 
 @documentation("Retrieve a list of stores based on the provided queries")
-structure ListStoresInput with [Pagination] {
+structure ListStoresInput with [InputPagination] {
     @httpQuery("name")
     name: ResourceName
 
@@ -57,18 +57,11 @@ structure ListStoresInput with [Pagination] {
     @httpQuery("userTimezone")
     userTimezone: UTCTimezone
 
-    @httpQuery("maxDistance")
-    @documentation("in kilometers")
-    maxDistance: Integer
-
-    @httpQuery("userLongitude")
-    userLongitude: Longitude
-
-    @httpQuery("userLatitude")
-    userLatitude: Latitude
+    @documentation("If provided all the subfields must be fulfilled")
+    userDistanceQuery: UserDistanceQuery
 }
 
-structure ListStoresOutput with [Pagination] {
+structure ListStoresOutput with [OutputPagination] {
     @required
     tokens: StoreSummaryList
 }
