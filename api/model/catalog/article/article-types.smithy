@@ -5,27 +5,27 @@ namespace shopping.inandout.catalog.article
 use shopping.inandout#AuditMetadata
 use shopping.inandout#PositiveDouble
 use shopping.inandout#UUID
-use shopping.inandout.catalog.product#ProductInput
 use shopping.inandout.catalog.product#ProductSummary
+use shopping.inandout.outlet.brand#Brand
 
-structure ArticleInput {
-    @required
-    @httpLabel
-    brandId: UUID
-
-    @required
-    price: Double
-
+@mixin
+structure ArticleMixin {
     currency: String
-
-    @documentation("Existing product referenced in a new article")
-    productId: UUID
-
-    @documentation("Create a new product as well")
-    productInput: ProductInput
 }
 
-structure ArticleSummary with [AuditMetadata] {
+@mixin
+structure ArticleInputMixin with [ArticleMixin] {}
+
+@mixin
+@references([
+    {
+        resource: Brand
+    }
+    {
+        resource: Article
+    }
+])
+structure ArticleOutputMixin with [AuditMetadata, ArticleMixin] {
     @required
     brandId: UUID
 
@@ -37,6 +37,6 @@ structure ArticleSummary with [AuditMetadata] {
 
     @required
     price: PositiveDouble
-
-    currency: String
 }
+
+structure ArticleSummary with [ArticleOutputMixin] {}

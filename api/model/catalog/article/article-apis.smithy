@@ -9,13 +9,14 @@ use shopping.inandout#PositiveDouble
 use shopping.inandout#ResourceAlreadyExistsError
 use shopping.inandout#ResourceNotFoundError
 use shopping.inandout#UUID
+use shopping.inandout.catalog.product#ProductSummary
 
 resource Article {
     identifiers: {
         articleId: UUID
     }
     properties: {
-        productId: UUID
+        productSummary: ProductSummary
         brandId: UUID
         price: PositiveDouble
         currency: String

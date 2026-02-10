@@ -16,6 +16,11 @@ structure BrandMixin {
 structure BrandInputMixin with [BrandMixin] {}
 
 @mixin
+@references([
+    {
+        resource: Brand
+    }
+])
 structure BrandOutputMixin with [AuditMetadata, BrandMixin] {
     @required
     brandId: UUID

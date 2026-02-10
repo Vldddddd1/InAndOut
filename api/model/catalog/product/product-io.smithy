@@ -2,12 +2,10 @@ $version: "2"
 
 namespace shopping.inandout.catalog.product
 
-use shopping.inandout#Description
-use shopping.inandout#ImageUrl
 use shopping.inandout#ResourceName
 use shopping.inandout#UUID
 
-structure CreateProductInput {
+structure CreateProductInput with [ProductInputMixin] {
     @required
     name: ResourceName
 
@@ -16,12 +14,6 @@ structure CreateProductInput {
 
     @required
     category: ResourceName
-
-    vendor: ResourceName
-
-    imageUrl: ImageUrl
-
-    description: Description
 }
 
 structure CreateProductOutput {
@@ -35,12 +27,9 @@ structure GetProductInput {
     productId: UUID
 }
 
-structure GetProductOutput {
-    @required
-    productSummary: ProductSummary
-}
+structure GetProductOutput with [ProductOutputMixin] {}
 
-structure UpdateProductInput {
+structure UpdateProductInput with [ProductInputMixin] {
     @required
     @httpLabel
     productId: UUID
@@ -50,18 +39,9 @@ structure UpdateProductInput {
     subcategory: ResourceName
 
     category: ResourceName
-
-    vendor: ResourceName
-
-    imageUrl: ImageUrl
-
-    description: Description
 }
 
-structure UpdateProductOutput {
-    @required
-    productSummary: ProductSummary
-}
+structure UpdateProductOutput with [ProductOutputMixin] {}
 
 structure DeleteProductInput {
     @required

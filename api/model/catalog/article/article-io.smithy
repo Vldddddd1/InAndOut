@@ -2,25 +2,30 @@ $version: "2"
 
 namespace shopping.inandout.catalog.article
 
+use shopping.inandout#BrandIdMixin
 use shopping.inandout#PositiveDouble
 use shopping.inandout#UUID
-use shopping.inandout.catalog.product#ProductInput
+use shopping.inandout.catalog.product#CreateProductInput
+use shopping.inandout.catalog.product#Product
 
-structure CreateArticleInput {
-    @required
-    @httpLabel
-    brandId: UUID
-
+@references([
+    {
+        resource: Product
+    }
+])
+structure CreateArticleInput with [BrandIdMixin, ArticleInputMixin] {
     @required
     price: PositiveDouble
 
-    currency: String
-
+    // Clients must choose between providing a product id/details.
+    // Not none, not both, one field must be filled.
+    @notProperty
     @documentation("Existing product referenced in a new article")
     productId: UUID
 
-    @documentation("Create a new product as well")
-    productInput: ProductInput
+    @notProperty
+    @documentation("Creates a new product")
+    createProductInput: CreateProductInput
 }
 
 structure CreateArticleOutput {
@@ -28,45 +33,25 @@ structure CreateArticleOutput {
     articleId: UUID
 }
 
-structure GetArticleInput {
-    @required
-    @httpLabel
-    brandId: UUID
-
+structure GetArticleInput with [BrandIdMixin] {
     @required
     @httpLabel
     articleId: UUID
 }
 
-structure GetArticleOutput {
-    @required
-    articleSummary: ArticleSummary
-}
+structure GetArticleOutput with [ArticleOutputMixin] {}
 
-structure UpdateArticleInput {
-    @required
-    @httpLabel
-    brandId: UUID
-
+structure UpdateArticleInput with [BrandIdMixin, ArticleInputMixin] {
     @required
     @httpLabel
     articleId: UUID
 
     price: PositiveDouble
-
-    currency: String
 }
 
-structure UpdateArticleOutput {
-    @required
-    articleSummary: ArticleSummary
-}
+structure UpdateArticleOutput with [ArticleOutputMixin] {}
 
-structure DeleteArticleInput {
-    @required
-    @httpLabel
-    brandId: UUID
-
+structure DeleteArticleInput with [BrandIdMixin] {
     @required
     @httpLabel
     articleId: UUID

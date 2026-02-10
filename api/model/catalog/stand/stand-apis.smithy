@@ -8,6 +8,7 @@ use shopping.inandout#PositiveDouble
 use shopping.inandout#ResourceAlreadyExistsError
 use shopping.inandout#ResourceNotFoundError
 use shopping.inandout#UUID
+use shopping.inandout.catalog.article#ArticleSummary
 
 resource Stand {
     identifiers: {
@@ -15,8 +16,8 @@ resource Stand {
     }
     properties: {
         edgeId: UUID
-        articleId: UUID
         sourceNodeDistance: PositiveDouble
+        articleSummary: ArticleSummary
         createdAt: Timestamp
         updatedAt: Timestamp
     }

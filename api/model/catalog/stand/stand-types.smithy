@@ -7,7 +7,8 @@ use shopping.inandout#PositiveDouble
 use shopping.inandout#UUID
 use shopping.inandout.catalog.article#ArticleSummary
 
-structure StandSummary with [AuditMetadata] {
+@mixin
+structure StandOutputMixin with [AuditMetadata] {
     @required
     standId: UUID
 
@@ -15,11 +16,13 @@ structure StandSummary with [AuditMetadata] {
     edgeId: UUID
 
     @required
-    artileSummary: ArticleSummary
+    sourceNodeDistance: PositiveDouble
 
     @required
-    sourceNodeDistance: PositiveDouble
+    articleSummary: ArticleSummary
 }
+
+structure StandSummary with [StandOutputMixin] {}
 
 list StandSummaryList {
     member: StandSummary

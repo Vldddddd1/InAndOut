@@ -10,6 +10,24 @@ use shopping.inandout#UUID
 
 @mixin
 structure ProductMixin {
+    vendor: ResourceName
+    imageUrl: ImageUrl
+    description: Description
+}
+
+@mixin
+structure ProductInputMixin with [ProductMixin] {}
+
+@mixin
+@references([
+    {
+        resource: Product
+    }
+])
+structure ProductOutputMixin with [AuditMetadata, ProductMixin] {
+    @required
+    productId: UUID
+
     @required
     name: ResourceName
 
@@ -18,17 +36,6 @@ structure ProductMixin {
 
     @required
     category: ResourceName
-
-    vendor: ResourceName
-
-    imageUrl: ImageUrl
-
-    description: Description
 }
 
-structure ProductInput with [ProductMixin] {}
-
-structure ProductSummary with [ProductMixin, AuditMetadata] {
-    @required
-    productId: UUID
-}
+structure ProductSummary with [ProductOutputMixin] {}
