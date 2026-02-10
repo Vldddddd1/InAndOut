@@ -7,12 +7,21 @@ use shopping.inandout#ImageUrl
 use shopping.inandout#ResourceName
 use shopping.inandout#UUID
 
-structure BrandSummary with [AuditMetadata] {
+@mixin
+structure BrandMixin {
+    logoUrl: ImageUrl
+}
+
+@mixin
+structure BrandInputMixin with [BrandMixin] {}
+
+@mixin
+structure BrandOutputMixin with [AuditMetadata, BrandMixin] {
     @required
     brandId: UUID
 
     @required
     name: ResourceName
-
-    logoUrl: ImageUrl
 }
+
+structure BrandSummary with [BrandOutputMixin] {}

@@ -2,37 +2,25 @@ $version: "2"
 
 namespace shopping.inandout.outlet.store
 
-use shopping.inandout#Description
-use shopping.inandout#ImageUrl
 use shopping.inandout#InputPagination
 use shopping.inandout#Latitude
 use shopping.inandout#Longitude
 use shopping.inandout#NaturalNumber
 use shopping.inandout#OutputPagination
 use shopping.inandout#ResourceName
-use shopping.inandout#UTCTimezone
 use shopping.inandout#UUID
+use shopping.inandout.outlet.brand#Brand
 
-structure CreateStoreInput {
+// The creation of the brand is independent of the creation of the store.
+@references([
+    {
+        resource: Brand
+    }
+])
+structure CreateStoreInput with [StoreInputMixin] {
     @required
+    @notProperty
     brandId: UUID
-
-    @required
-    name: ResourceName
-
-    description: Description
-
-    imageUrl: ImageUrl
-
-    timezone: UTCTimezone
-
-    operatingHoursMap: OperatingHoursMap
-
-    locationMapping: LocationMapping
-
-    longitude: Longitude
-
-    latitude: Latitude
 }
 
 structure CreateStoreOutput {
@@ -46,10 +34,7 @@ structure GetStoreInput {
     storeId: UUID
 }
 
-structure GetStoreOutput {
-    @required
-    storeSummary: StoreSummary
-}
+structure GetStoreOutput with [StoreOutputMixin] {}
 
 @documentation("Retrieve a list of stores based on the provided queries")
 structure ListStoresInput with [InputPagination] {
@@ -64,6 +49,7 @@ structure ListStoresInput with [InputPagination] {
 
     // ! User location must be provided in order for the below queries to work.
     @httpQuery("isOpen")
+    @documentation("Based on user location, his timezone is computed and then the list of open markets")
     isOpen: Boolean
 
     @httpQuery("maxDistance")
@@ -76,32 +62,13 @@ structure ListStoresOutput with [OutputPagination] {
     tokens: StoreSummaryList
 }
 
-structure UpdateStoreInput {
+structure UpdateStoreInput with [StoreInputMixin] {
     @required
     @httpLabel
     storeId: UUID
-
-    name: ResourceName
-
-    description: Description
-
-    imageUrl: ImageUrl
-
-    timezone: UTCTimezone
-
-    operatingHoursMap: OperatingHoursMap
-
-    locationMapping: LocationMapping
-
-    longitude: Longitude
-
-    latitude: Latitude
 }
 
-structure UpdateStoreOutput {
-    @required
-    storeSummary: StoreSummary
-}
+structure UpdateStoreOutput with [StoreOutputMixin] {}
 
 structure DeleteStoreInput {
     @required

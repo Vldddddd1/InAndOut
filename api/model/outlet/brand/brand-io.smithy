@@ -2,16 +2,18 @@ $version: "2"
 
 namespace shopping.inandout.outlet.brand
 
+use shopping.inandout#ResourceName
 use shopping.inandout#UUID
 
-structure CreateBrandInput {
+structure CreateBrandInput with [BrandInputMixin] {
     @required
-    name: String
-
-    logoUrl: String
+    name: ResourceName
 }
 
-structure CreateBrandOutput {}
+structure CreateBrandOutput {
+    @required
+    brandId: UUID
+}
 
 structure GetBrandInput {
     @required
@@ -19,25 +21,17 @@ structure GetBrandInput {
     brandId: UUID
 }
 
-structure GetBrandOutput {
-    @required
-    brandSummary: BrandSummary
-}
+structure GetBrandOutput with [BrandOutputMixin] {}
 
-structure UpdateBrandInput {
+structure UpdateBrandInput with [BrandInputMixin] {
     @required
     @httpLabel
     brandId: UUID
 
-    name: String
-
-    logoUrl: String
+    name: ResourceName
 }
 
-structure UpdateBrandOutput {
-    @required
-    brandSummary: BrandSummary
-}
+structure UpdateBrandOutput with [BrandOutputMixin] {}
 
 structure DeleteBrandInput {
     @required

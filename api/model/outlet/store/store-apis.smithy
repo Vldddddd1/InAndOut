@@ -14,6 +14,7 @@ use shopping.inandout#ResourceName
 use shopping.inandout#ResourceNotFoundError
 use shopping.inandout#UTCTimezone
 use shopping.inandout#UUID
+use shopping.inandout.outlet.brand#BrandSummary
 
 resource Store {
     identifiers: {
@@ -21,9 +22,9 @@ resource Store {
     }
     properties: {
         name: ResourceName
+        brandSummary: BrandSummary
         description: Description
         imageUrl: ImageUrl
-        brandId: UUID
         timezone: UTCTimezone
         operatingHoursMap: OperatingHoursMap
         locationMapping: LocationMapping

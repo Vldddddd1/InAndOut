@@ -95,11 +95,14 @@ structure OutputPagination {
 
     @required
     @documentation("The actual number of items returned in the current response page.")
-    tokenCount: Integer
+    tokenCount: NaturalNumber
 }
 
 @mixin
 structure AuditMetadata {
+    @required
     createdAt: Timestamp
+
+    @required
     updatedAt: Timestamp
 }

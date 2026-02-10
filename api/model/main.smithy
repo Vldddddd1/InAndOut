@@ -3,6 +3,7 @@ $version: "2"
 namespace shopping.inandout
 
 use shopping.inandout.catalog.article#Article
+use shopping.inandout.catalog.product#Product
 use shopping.inandout.catalog.stand#Stand
 use shopping.inandout.marketing.offer#Offer
 use shopping.inandout.outlet.brand#Brand
@@ -17,6 +18,7 @@ service InAndOut {
         Brand
         Stand
         Article
+        Product
         Offer
     ]
     operations: [

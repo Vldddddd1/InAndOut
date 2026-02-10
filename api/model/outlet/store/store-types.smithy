@@ -8,6 +8,7 @@ use shopping.inandout#Description
 use shopping.inandout#ImageUrl
 use shopping.inandout#Latitude
 use shopping.inandout#Longitude
+use shopping.inandout#NaturalNumber
 use shopping.inandout#ResourceName
 use shopping.inandout#TimeRange
 use shopping.inandout#UTCTimezone
@@ -55,11 +56,9 @@ structure Edge {
 
 structure Node {
     @required
-    number: Integer
+    name: ResourceName
 
     type: NodeType
-
-    name: ResourceName
 }
 
 enum NodeType {
@@ -68,8 +67,25 @@ enum NodeType {
     DESCENT = "DESCENT"
 }
 
-@documentation("Also retrieves data of the associated brand")
-structure StoreSummary with [AuditMetadata] {
+@mixin
+structure StoreMixin {
+    description: Description
+    imageUrl: ImageUrl
+    timezone: UTCTimezone
+    operatingHoursMap: OperatingHoursMap
+    longitude: Longitude
+    latitude: Latitude
+}
+
+@mixin
+structure StoreInputMixin with [StoreMixin] {
+    name: ResourceName
+    locationMapping: LocationMapping
+}
+
+@mixin
+@documentation("Retrieves store and its associated brand details")
+structure StoreOutputMixin with [AuditMetadata, StoreMixin] {
     @required
     storeId: UUID
 
@@ -79,18 +95,12 @@ structure StoreSummary with [AuditMetadata] {
     @required
     brandSummary: BrandSummary
 
-    description: Description
-
-    imageUrl: ImageUrl
-
-    timezone: UTCTimezone
-
-    operatingHoursMap: OperatingHoursMap
-
-    longitude: Longitude
-
-    latitude: Latitude
+    @required
+    mappingVersion: NaturalNumber
 }
+
+// Needed for the list method.
+structure StoreSummary with [StoreOutputMixin] {}
 
 list StoreSummaryList {
     member: StoreSummary
