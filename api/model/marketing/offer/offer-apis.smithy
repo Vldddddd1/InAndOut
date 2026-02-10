@@ -19,9 +19,9 @@ resource Offer {
     }
     properties: {
         storeId: UUID
+        percentage: Percentage
         articleIdList: UUIDList
         dependencyList: DependencyList
-        percentage: Percentage
         timeRange: TimeRange
         lifetime: NaturalNumber
         createdAt: Timestamp

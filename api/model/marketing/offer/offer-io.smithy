@@ -10,21 +10,9 @@ use shopping.inandout#TimeRange
 use shopping.inandout#UUID
 use shopping.inandout#UUIDList
 
-structure CreateOfferInput {
-    @required
-    @httpLabel
-    storeId: UUID
-
+structure CreateOfferInput with [StoreIdMixin, OfferInputMixin] {
     @required
     percentage: Percentage
-
-    articleIdList: UUIDList
-
-    dependencyList: DependencyList
-
-    timeRange: TimeRange
-
-    lifetime: NaturalNumber
 }
 
 structure CreateOfferOutput {
@@ -32,33 +20,22 @@ structure CreateOfferOutput {
     offerId: UUID
 }
 
-structure GetOfferInput {
-    @required
-    @httpLabel
-    storeId: UUID
-
+structure GetOfferInput with [StoreIdMixin] {
     @required
     @httpLabel
     offerId: UUID
 }
 
-structure GetOfferOutput {
-    @required
-    offerSummary: OfferSummary
-}
+structure GetOfferOutput with [OfferOutputMixin] {}
 
-structure ListOffersInput with [InputPagination] {
-    @required
-    @httpLabel
-    storeId: UUID
-}
+structure ListOffersInput with [StoreIdMixin, InputPagination] {}
 
 structure ListOffersOutput with [OutputPagination] {
     @required
     tokens: OfferSummaryList
 }
 
-structure UpdateOfferInput {
+structure UpdateOfferInput with [StoreIdMixin, OfferInputMixin] {
     @required
     @httpLabel
     storeId: UUID
@@ -78,16 +55,9 @@ structure UpdateOfferInput {
     lifetime: NaturalNumber
 }
 
-structure UpdateOfferOutput {
-    @required
-    offerSummary: OfferSummary
-}
+structure UpdateOfferOutput with [OfferOutputMixin] {}
 
-structure DeleteOfferInput {
-    @required
-    @httpLabel
-    storeId: UUID
-
+structure DeleteOfferInput with [StoreIdMixin] {
     @required
     @httpLabel
     offerId: UUID
