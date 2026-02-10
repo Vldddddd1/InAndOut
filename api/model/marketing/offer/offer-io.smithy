@@ -3,12 +3,10 @@ $version: "2"
 namespace shopping.inandout.marketing.offer
 
 use shopping.inandout#InputPagination
-use shopping.inandout#NaturalNumber
 use shopping.inandout#OutputPagination
 use shopping.inandout#Percentage
-use shopping.inandout#TimeRange
+use shopping.inandout#StoreIdMixin
 use shopping.inandout#UUID
-use shopping.inandout#UUIDList
 
 structure CreateOfferInput with [StoreIdMixin, OfferInputMixin] {
     @required
@@ -38,21 +36,9 @@ structure ListOffersOutput with [OutputPagination] {
 structure UpdateOfferInput with [StoreIdMixin, OfferInputMixin] {
     @required
     @httpLabel
-    storeId: UUID
-
-    @required
-    @httpLabel
     offerId: UUID
 
     percentage: Percentage
-
-    articleIdList: UUIDList
-
-    dependencyList: DependencyList
-
-    timeRange: TimeRange
-
-    lifetime: NaturalNumber
 }
 
 structure UpdateOfferOutput with [OfferOutputMixin] {}

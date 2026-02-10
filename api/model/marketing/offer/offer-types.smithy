@@ -26,21 +26,6 @@ structure Dependency {
     quantity: NaturalNumber
 }
 
-// This is used for in all input structures of the offer operations.
-// Imagine having to write this for all of them repeatedly.
-@mixin
-@references([
-    {
-        resource: Store
-    }
-])
-@documentation("Internal helper structure used to diminish the verbosity of the storeId field")
-structure StoreIdMixin {
-    @required
-    @httpLabel
-    storeId: UUID
-}
-
 @mixin
 structure OfferMixin {
     articleIdList: UUIDList

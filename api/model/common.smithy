@@ -2,6 +2,9 @@ $version: "2"
 
 namespace shopping.inandout
 
+use shopping.inandout.outlet.brand#Brand
+use shopping.inandout.outlet.store#Store
+
 @pattern("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 @length(min: 32, max: 32)
 string UUID
@@ -75,6 +78,15 @@ structure TimeRange {
 }
 
 @mixin
+structure AuditMetadata {
+    @required
+    createdAt: Timestamp
+
+    @required
+    updatedAt: Timestamp
+}
+
+@mixin
 @documentation("Parameters sent by the client to control pagination of the list results")
 structure InputPagination {
     @httpQuery("nextToken")
@@ -98,11 +110,31 @@ structure OutputPagination {
     tokenCount: NaturalNumber
 }
 
+// The below mixins are used for uri labels poiting to external resources.
+// Internal entity used in offer/stand operations' input structures.
 @mixin
-structure AuditMetadata {
+@references([
+    {
+        resource: Store
+    }
+])
+@documentation("Internal helper structure used to diminish the verbosity of the storeId field")
+structure StoreIdMixin {
     @required
-    createdAt: Timestamp
+    @httpLabel
+    storeId: UUID
+}
 
+// Internal entity used in article operations' input structures.
+@mixin
+@references([
+    {
+        resource: Brand
+    }
+])
+@documentation("Internal helper structure used to diminish the verbosity of the brandId field")
+structure BrandIdMixin {
     @required
-    updatedAt: Timestamp
+    @httpLabel
+    brandId: UUID
 }
